@@ -4,7 +4,11 @@ The core visual-scripting nodes for Inkwell, released on its own schedule. The f
 
 ## Contents
 
-`manifest.json`, node definitions in JSON (fields in JSON Schema), AS2 templates per node, optional `.as` class files. The manifest format comes from `inkwell-spec`.
+- `manifest.json` (id `core`), `nodes/<Kind>.json` (one definition per node, `NodeDef` from `inkwell-spec`; `fields` maps field name to a JSON Schema), `templates/<Kind>.as2` (one AS2 template per node; editor-only nodes have none), optional `.as` class files later.
+- `docs/templates.md`: the template format (placeholders, pure nodes, loops, Delay, error convention). Read it before touching a template.
+- `scripts/lib.mjs` (loader and a minimal test renderer; the real renderer is the editor's codegen), `scripts/validate.mjs`, `test/` (snapshot of every rendered template).
+
+Commands (yarn only): `yarn validate` (schemas, template files exist, placeholders match pins), `yarn test` (`UPDATE=1 yarn test` rewrites `test/rendered.snap.as2`; review the diff). `inkwell-spec` is a `link:../Inkwell-Spec` dev dependency: run `yarn build` there after schema changes. Changing a template or pin means updating the snapshot and `CHANGELOG.md`.
 
 ## Rules that are easy to break
 
