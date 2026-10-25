@@ -44,6 +44,29 @@ if (!__g.s_n1) {
     /* next:then */
 }
 
+===== core/Fade@1
+// [n1] core/Fade@1
+clearInterval(__g.t_n1);
+var n1_from = IN_from;
+var n1_to = IN_to;
+var n1_ms = IN_seconds * 1000;
+var n1_t0 = getTimer();
+IN_target._alpha = n1_from;
+__g.t_n1 = setInterval(function() {
+    var k = (n1_ms > 0) ? (getTimer() - n1_t0) / n1_ms : 1;
+    if (!(k < 1)) k = 1;
+    IN_target._alpha = n1_from + (n1_to - n1_from) * k;
+    if (k == 1) {
+        clearInterval(__g.t_n1);
+        try {
+            /* next:done */
+        } catch (e) {
+            __g.fail("n0", e);
+        }
+    }
+}, 33);
+/* next:then */
+
 ===== core/FocusComponent@1
 // [n1] core/FocusComponent@1
 Selection.setFocus(IN_target);
@@ -293,6 +316,11 @@ case "":
 default:
     /* next:default */
 }
+
+===== core/Throw@1
+// [n1] core/Throw@1
+throw { node: "n1", message: IN_message };
+/* next:then */
 
 ===== core/ToNumber@1 (pure)
 // [n1] core/ToNumber@1

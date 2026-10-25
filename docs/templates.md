@@ -56,6 +56,8 @@ Everything is synchronous except Delay and the timers.
 - **For Each**: Flash 8 has no block scope and `for` shares one set of locals, so the body is a closure that receives the element: `var body = function(item, index) {...}; for (...) body(arr[i], i);`. Each call gets its own scope, so a Delay inside the body captures its own `item`. `completed` runs right after the loop has started all iterations (it does not wait for delayed work in the body).
 - **Delay**: `var iv = setInterval(function() { clearInterval(iv); <guarded then> }, seconds * 1000);` The continuation is `guarded` because it runs outside the original handler's `try/catch`. A pending Delay cannot be cancelled in 0.2.
 - **On Timer**: `__g.t_<uid> = setInterval(...)`, cleared by the handler itself when `repeat` is false.
+- **Fade** (Components, 0.2 helper until Tween arrives in 0.3): sets the target's `_alpha` to `from`, then a `setInterval` (33 ms) moves it linearly to `to` over `seconds` using `getTimer()` (frame-rate independent). `then` runs at once, `done` (guarded) when the fade has reached `to`; use `done` to chain Delay or a second Fade. The timer id is per node (`__g.t_<uid>`): running the same Fade node again restarts it, two Fade nodes on one target do not cancel each other. Alpha is 0..100.
+- **Throw** (Debug): `throw {node, message}`; the handler's `try/catch` logs the node id and the handler stops there. For checking error handling in game.
 - **Do Once**: a flag on `__g`, no reset in 0.2.
 
 `setInterval` and closures are expected to work in GFx but are not yet checked in game (PLAN-0.2 section 7).
