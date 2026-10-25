@@ -1,0 +1,307 @@
+===== core/And@1 (pure)
+// [n1] core/And@1
+IN_a && IN_b
+
+===== core/Arithmetic@1 (pure)
+// [n1] core/Arithmetic@1
+(isFinite(IN_a + IN_b) ? (IN_a + IN_b) : 0)
+
+===== core/Branch@1
+// [n1] core/Branch@1
+if (IN_condition) {
+    /* next:true */
+} else {
+    /* next:false */
+}
+
+===== core/Clamp@1 (pure)
+// [n1] core/Clamp@1
+Math.min(Math.max(IN_value, IN_min), IN_max)
+
+===== core/Compare@1 (pure)
+// [n1] core/Compare@1
+IN_a == IN_b
+
+===== core/Concat@1 (pure)
+// [n1] core/Concat@1
+String(IN_a) + String(IN_b)
+
+===== core/Delay@1
+// [n1] core/Delay@1
+var n1_iv = setInterval(function() {
+    clearInterval(n1_iv);
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+}, IN_seconds * 1000);
+
+===== core/DoOnce@1
+// [n1] core/DoOnce@1
+if (!__g.s_n1) {
+    __g.s_n1 = true;
+    /* next:then */
+}
+
+===== core/FocusComponent@1
+// [n1] core/FocusComponent@1
+Selection.setFocus(IN_target);
+/* next:then */
+
+===== core/ForEach@1
+// [n1] core/ForEach@1
+var n1_arr = IN_array;
+var n1_body = function(n1_item, n1_index) {
+    /* next:body */
+};
+for (var n1_i = 0; n1_i < n1_arr.length; n1_i++) {
+    n1_body(n1_arr[n1_i], n1_i);
+}
+/* next:completed */
+
+===== core/Format@1 (pure)
+// [n1] core/Format@1
+IN_pattern.split("{0}").join(IN_a).split("{1}").join(IN_b).split("{2}").join(IN_c).split("{3}").join(IN_d)
+
+===== core/FormatNumber@1 (pure)
+// [n1] core/FormatNumber@1
+String(Math.round(IN_value * Math.pow(10, 0)) / Math.pow(10, 0))
+
+===== core/GetText@1 (pure)
+// [n1] core/GetText@1
+(IN_target.text == undefined ? "" : String(IN_target.text))
+
+===== core/GetVariable@1 (pure)
+// [n1] core/GetVariable@1
+__g.v_x
+
+===== core/Lerp@1 (pure)
+// [n1] core/Lerp@1
+IN_a + (IN_b - IN_a) * IN_t
+
+===== core/Log@1
+// [n1] core/Log@1
+trace("[Inkwell] info n1: " + IN_message);
+/* next:then */
+
+===== core/Not@1 (pure)
+// [n1] core/Not@1
+!IN_a
+
+===== core/OnBlur@1
+// [n1] core/OnBlur@1
+IN_target.onKillFocus = function() {
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+};
+
+===== core/OnClick@1
+// [n1] core/OnClick@1
+IN_target.onRelease = function() {
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+};
+
+===== core/OnClose@1
+// [n1] core/OnClose@1
+__g.onClose = function() {
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+};
+
+===== core/OnFocus@1
+// [n1] core/OnFocus@1
+IN_target.onSetFocus = function() {
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+};
+
+===== core/OnInput@1
+// [n1] core/OnInput@1
+__g.addInputHandler("Accept", function() {
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+});
+
+===== core/OnItemSelected@1
+// [n1] core/OnItemSelected@1
+__g.h_n1 = function(e) {
+    var n1_index = Number(e.index) || 0;
+    var n1_item = e.data || {};
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+};
+IN_target.addEventListener("itemClick", __g, "h_n1");
+
+===== core/OnLoad@1
+// [n1] core/OnLoad@1
+__g.onLoad = function() {
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+};
+
+===== core/OnOpen@1
+// [n1] core/OnOpen@1
+__g.onOpen = function() {
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+};
+
+===== core/OnTimer@1
+// [n1] core/OnTimer@1
+__g.t_n1 = setInterval(function() {
+    if (!true) {
+        clearInterval(__g.t_n1);
+    }
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+}, 1 * 1000);
+
+===== core/OnValueChanged@1
+// [n1] core/OnValueChanged@1
+__g.h_n1 = function(e) {
+    var n1_value = Number(e.target.value) || 0;
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+};
+IN_target.addEventListener("change", __g, "h_n1");
+
+===== core/OnWidgetCall@1
+// [n1] core/OnWidgetCall@1
+__g.Show = function(n1_title:String, n1_hold:Number) {
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+};
+
+===== core/Or@1 (pure)
+// [n1] core/Or@1
+IN_a || IN_b
+
+===== core/ProgressSetValue@1
+// [n1] core/ProgressSetValue@1
+IN_target.gotoAndStop(1 + Math.round(Math.min(Math.max(IN_value, 0), 1) * (100 - 1)));
+/* next:then */
+
+===== core/Sequence@1
+// [n1] core/Sequence@1
+/* next:then0 */
+/* next:then1 */
+/* next:then2 */
+/* next:then3 */
+
+===== core/SetAlpha@1
+// [n1] core/SetAlpha@1
+IN_target._alpha = IN_alpha;
+/* next:then */
+
+===== core/SetEnabled@1
+// [n1] core/SetEnabled@1
+IN_target.enabled = IN_enabled;
+/* next:then */
+
+===== core/SetImage@1
+// [n1] core/SetImage@1
+IN_target.loadMovie(IN_url);
+/* next:then */
+
+===== core/SetPosition@1
+// [n1] core/SetPosition@1
+IN_target._x = IN_x;
+IN_target._y = IN_y;
+/* next:then */
+
+===== core/SetScale@1
+// [n1] core/SetScale@1
+IN_target._xscale = IN_x;
+IN_target._yscale = IN_y;
+/* next:then */
+
+===== core/SetState@1
+// [n1] core/SetState@1
+IN_target.gotoAndStop(IN_state);
+/* next:then */
+
+===== core/SetText@1
+// [n1] core/SetText@1
+IN_target.text = IN_text;
+/* next:then */
+
+===== core/SetTint@1
+// [n1] core/SetTint@1
+new Color(IN_target).setRGB(IN_color);
+/* next:then */
+
+===== core/SetVariable@1
+// [n1] core/SetVariable@1
+__g.v_x = IN_value;
+/* next:then */
+
+===== core/SetVisible@1
+// [n1] core/SetVisible@1
+IN_target._visible = IN_visible;
+/* next:then */
+
+===== core/Switch@1
+// [n1] core/Switch@1
+switch (IN_value) {
+case "":
+    /* next:case0 */
+    break;
+case "":
+    /* next:case1 */
+    break;
+case "":
+    /* next:case2 */
+    break;
+case "":
+    /* next:case3 */
+    break;
+default:
+    /* next:default */
+}
+
+===== core/ToNumber@1 (pure)
+// [n1] core/ToNumber@1
+(Number(IN_value) || 0)
+
+===== core/ToString@1 (pure)
+// [n1] core/ToString@1
+String(IN_value)
+
+===== core/Translate@1 (pure)
+// [n1] core/Translate@1
+IN_key

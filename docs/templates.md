@@ -1,0 +1,69 @@
+# AS2 template format
+
+One template per node: `templates/<Kind>.as2`, referenced by `as2Template` in `nodes/<Kind>.json`. The editor's codegen (Phase 5, `Inkwell-Editor`) renders them. `scripts/lib.mjs` has a deliberately minimal renderer that only exists to test templates against their pins; it is not the real one.
+
+Target is Flash 8 AS2 as Skyrim's GFx runs it: no `Error` class, no `flash.filters`, `try/catch` works.
+
+## File shape
+
+Line 1 is always the header `// [{{node.id}}] core/<Kind>@<major>`. The rest is the body. Codegen keeps the header as a comment above the node's code and uses it for the source map. A node with no template (Comment, Reroute, Group) is editor-only and omits `as2Template`.
+
+## Placeholders
+
+Syntax `{{kind.name}}` (or `{{params}}`). Never write two `{` in a row anywhere else in a template.
+
+| Placeholder | Becomes |
+| --- | --- |
+| `{{node.id}}` | the graph node id, as text (comments and strings only) |
+| `{{node.uid}}` | the id made identifier-safe; use it to build unique locals and member names |
+| `{{in.<pin>}}` | the expression feeding data input `<pin>`: an inlined pure expression, a temp name, or the pin default literal when unconnected |
+| `{{out.<pin>}}` | the name codegen chose for data output `<pin>` (a local, or a function parameter in event and loop templates). Exec nodes declare it or receive it as a parameter |
+| `{{field.<name>}}` | the node field rendered as an AS2 literal (strings quoted and escaped) |
+| `{{raw.<name>}}` | the field verbatim, for enum or pattern-constrained fields only (operators, handler names) |
+| `{{var.<field>}}` | the AS2 lvalue (`__g.v_<name>`) of the graph variable whose id is in that field |
+| `{{next.<execOut>}}` | the statements that follow exec output `<execOut>` |
+| `{{guarded.<execOut>}}` | the same statements wrapped in `try { ... } catch (e) { __g.fail("<entry node id>", e); }` |
+| `{{params}}` | On Widget Call only: the typed parameter list built from `fields.params` |
+
+Rules:
+- Every exec output pin appears exactly once, as `next` or `guarded`, on its own line. Codegen re-indents the multi-line substitution to that line's indentation. An exec output with no wire renders as nothing.
+- Every data input is used at least once; every data output of a non-pure node is produced (`{{out.x}}` appears).
+- **A repeated `{{in.x}}` is allowed; codegen then hoists any non-atomic input expression into a temp** so it is evaluated once. Input expressions are always safe to embed without extra parentheses by the template (codegen parenthesizes non-atomic ones).
+- Inputs arrive already coerced to the pin type (`pinCompat` in `inkwell-spec`) and, if unconnected, hold the pin default.
+- **Outputs coerce inside the template** to the pin default: `Number(x) || 0`, `x == undefined ? "" : String(x)`. Codegen does not add a second coercion.
+- The generated graph class is `dynamic`. Inside every handler and method codegen emits `var __g = this;` first, so templates always refer to the graph instance as `__g` (also inside closures, where `this` is something else). Per-node state lives on `__g` under `s_<uid>`, `t_<uid>`, `h_<uid>`.
+- `__g` provides `fail(nodeId, e)` (logs the failing node id; accepts a string or a plain object with `node` and `message`) and `addInputHandler(action, fn)` (On Input). Both come from the generated base, not from templates.
+
+## Pure nodes: inline or temp
+
+`pure: true` means no side effects and no exec pins. The template body is exactly one AS2 expression on the line after the header, with a single data output named `value` (Reroute excepted, editor-only). Codegen:
+- inlines it, wrapped in parentheses unless atomic, when the output feeds one consumer, or
+- emits `var <temp> = <expr>;` before the first consumer when it feeds several, cached per dependency scope (once per event run, or once per loop iteration if it depends on `{{out.item}}` or `{{out.index}}` of a loop).
+- A node with `extra.volatile: true` (Get Variable, Get Text) reads mutable state and is never cached: it is always inlined, so it sees writes made earlier in the same run.
+
+## Events (entry nodes, `extra.entry: true`)
+
+No exec input. The template is a registration statement that codegen places in the graph class `init()`; the continuation goes inside the handler as `{{guarded.then}}`, so a handler failure is logged with the entry node id and never escapes. Data outputs (On Value Changed `value`, On Item Selected `index`/`item`) are locals declared at the top of the handler. On Widget Call: `fields.name` and `fields.params` (`[{name, type}]`, type String, Number or Bool) define the handler `__g.<name> = function(<params>) {...}` and, later, the Papyrus function. Its data output pins are the params (`extra.dynamicOutputs: "params"`), so the editor derives the pin list from the field.
+
+## Dynamic pin types
+
+AS2 pins have static types in the definition. Where a pin's type depends on a field, the pin carries `typeFrom: "<field>"`: the field value is a pin type name (`kind`: component kind, `valueType`: Compare operand type) or, for Get/Set Variable, the id of a graph variable whose type is used. `type` is the fallback. Reroute uses `typeFrom: "connection"` (type follows the wire).
+
+## Control flow and asynchrony
+
+Everything is synchronous except Delay and the timers.
+- **Sequence**: its pins are emitted one after the other, `then0` to `then3`. If a branch contains a Delay, the next pin does not wait for it.
+- **For Each**: Flash 8 has no block scope and `for` shares one set of locals, so the body is a closure that receives the element: `var body = function(item, index) {...}; for (...) body(arr[i], i);`. Each call gets its own scope, so a Delay inside the body captures its own `item`. `completed` runs right after the loop has started all iterations (it does not wait for delayed work in the body).
+- **Delay**: `var iv = setInterval(function() { clearInterval(iv); <guarded then> }, seconds * 1000);` The continuation is `guarded` because it runs outside the original handler's `try/catch`. A pending Delay cannot be cancelled in 0.2.
+- **On Timer**: `__g.t_<uid> = setInterval(...)`, cleared by the handler itself when `repeat` is false.
+- **Do Once**: a flag on `__g`, no reset in 0.2.
+
+`setInterval` and closures are expected to work in GFx but are not yet checked in game (PLAN-0.2 section 7).
+
+## Errors
+
+Handlers are wrapped by `guarded`. If a template has to fail on purpose it throws a string or a plain object, `throw {node: "{{node.id}}", message: "..."};`, never `Error`. Flash 8 mostly continues silently after runtime errors, so templates guard inputs (`|| 0`, `isFinite`, `== undefined`) instead of relying on exceptions.
+
+## Tests
+
+`yarn validate` loads the manifest and every node through the Spec schemas and runs the placeholder checks. `yarn test` also renders every template with fixture inputs and compares to `test/rendered.snap.as2` (`UPDATE=1 yarn test` rewrites it; review the diff). Compiling the output with FFDec is a Phase 5 integration test in the editor.

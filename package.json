@@ -1,0 +1,13 @@
+{
+  "name": "@inkwell-ui/core-pack",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "@inkwell-ui/spec": "link:../Inkwell-Spec"
+  }
+}
