@@ -1,3 +1,11 @@
+===== core/Abs@1 (pure)
+// [n1] core/Abs@1
+(Math.abs(IN_value) || 0)
+
+===== core/Add@1 (pure)
+// [n1] core/Add@1
+(IN_a + IN_b)
+
 ===== core/And@1 (pure)
 // [n1] core/And@1
 IN_a && IN_b
@@ -6,6 +14,29 @@ IN_a && IN_b
 // [n1] core/Arithmetic@1
 (isFinite(IN_a + IN_b) ? (IN_a + IN_b) : 0)
 
+===== core/ArrayGet@1 (pure)
+// [n1] core/ArrayGet@1
+(function(v, t) { if (t == "Number") return Number(v) || 0; if (t == "Bool") return v == true || v == "true"; if (t == "Array") return v instanceof Array ? v : []; if (t == "Object") return (typeof(v) == "object" && !(v instanceof Array)) ? v : {}; return v == undefined ? "" : String(v); })(IN_array[IN_index], "String")
+
+===== core/ArrayLength@1 (pure)
+// [n1] core/ArrayLength@1
+(Number(IN_array.length) || 0)
+
+===== core/ArrayPush@1 (pure)
+// [n1] core/ArrayPush@1
+(function(a, v) { var r = a instanceof Array ? a.concat() : []; r.push(v); return r; })(IN_array, IN_item)
+
+===== core/ArraySortByField@1 (pure)
+// [n1] core/ArraySortByField@1
+(function(a, f, d) { var r = a instanceof Array ? a.concat() : []; r.sort(function(x, y) { var p = x[f]; var q = y[f]; var c = (typeof(p) == "number" && typeof(q) == "number") ? p - q : (String(p) < String(q) ? -1 : (String(p) > String(q) ? 1 : 0)); return d ? -c : c; }); return r; })(IN_array, IN_field, IN_descending)
+
+===== core/Assert@1
+// [n1] core/Assert@1
+if (!IN_condition) {
+    throw { node: "n1", message: "Assert failed: " + IN_message };
+}
+/* next:then */
+
 ===== core/Branch@1
 // [n1] core/Branch@1
 if (IN_condition) {
@@ -13,6 +44,15 @@ if (IN_condition) {
 } else {
     /* next:false */
 }
+
+===== core/CancelDelay@1
+// [n1] core/CancelDelay@1
+if (__g.dl != undefined) clearInterval(__g.dl[""]);
+/* next:then */
+
+===== core/Ceil@1 (pure)
+// [n1] core/Ceil@1
+(Math.ceil(IN_value) || 0)
 
 ===== core/Clamp@1 (pure)
 // [n1] core/Clamp@1
@@ -26,16 +66,32 @@ IN_a == IN_b
 // [n1] core/Concat@1
 String(IN_a) + String(IN_b)
 
+===== core/Counter@1
+// [n1] core/Counter@1
+if (__g.ctr == undefined) __g.ctr = {};
+if (__g.ctr["counter"] == undefined) __g.ctr["counter"] = 0;
+if ("increment" == "increment") __g.ctr["counter"] += IN_by;
+else if ("increment" == "reset") __g.ctr["counter"] = 0;
+var n1_value = Number(__g.ctr["counter"]) || 0;
+/* next:then */
+
 ===== core/Delay@1
 // [n1] core/Delay@1
-var n1_iv = setInterval(function() {
-    clearInterval(n1_iv);
+if (__g.dl == undefined) __g.dl = {};
+var n1_k = ("" == "" ? "n1" : "");
+clearInterval(__g.dl[n1_k]);
+__g.dl[n1_k] = setInterval(function() {
+    clearInterval(__g.dl[n1_k]);
     try {
         /* next:then */
     } catch (e) {
         __g.fail("n0", e);
     }
 }, IN_seconds * 1000);
+
+===== core/Divide@1 (pure)
+// [n1] core/Divide@1
+(isFinite(IN_a / IN_b) ? (IN_a / IN_b) : 0)
 
 ===== core/DoOnce@1
 // [n1] core/DoOnce@1
@@ -67,6 +123,10 @@ __g.t_n1 = setInterval(function() {
 }, 33);
 /* next:then */
 
+===== core/Floor@1 (pure)
+// [n1] core/Floor@1
+(Math.floor(IN_value) || 0)
+
 ===== core/FocusComponent@1
 // [n1] core/FocusComponent@1
 Selection.setFocus(IN_target);
@@ -91,6 +151,20 @@ IN_pattern.split("{0}").join(IN_a).split("{1}").join(IN_b).split("{2}").join(IN_
 // [n1] core/FormatNumber@1
 String(Math.round(IN_value * Math.pow(10, 0)) / Math.pow(10, 0))
 
+===== core/GetAlpha@1 (pure)
+// [n1] core/GetAlpha@1
+(Number(IN_target._alpha) || 0)
+
+===== core/GetField@1 (pure)
+// [n1] core/GetField@1
+(function(v, t) { if (t == "Number") return Number(v) || 0; if (t == "Bool") return v == true || v == "true"; if (t == "Array") return v instanceof Array ? v : []; if (t == "Object") return (typeof(v) == "object" && !(v instanceof Array)) ? v : {}; return v == undefined ? "" : String(v); })(IN_object[IN_key], "String")
+
+===== core/GetPosition@1
+// [n1] core/GetPosition@1
+var n1_x = Number(IN_target._x) || 0;
+var n1_y = Number(IN_target._y) || 0;
+/* next:then */
+
 ===== core/GetText@1 (pure)
 // [n1] core/GetText@1
 (IN_target.text == undefined ? "" : String(IN_target.text))
@@ -98,6 +172,14 @@ String(Math.round(IN_value * Math.pow(10, 0)) / Math.pow(10, 0))
 ===== core/GetVariable@1 (pure)
 // [n1] core/GetVariable@1
 __g.v_x
+
+===== core/GetVisible@1 (pure)
+// [n1] core/GetVisible@1
+(IN_target._visible == true)
+
+===== core/Join@1 (pure)
+// [n1] core/Join@1
+(function(a, s) { return a instanceof Array ? a.join(s) : ""; })(IN_array, IN_separator)
 
 ===== core/Lerp@1 (pure)
 // [n1] core/Lerp@1
@@ -107,6 +189,26 @@ IN_a + (IN_b - IN_a) * IN_t
 // [n1] core/Log@1
 trace("[Inkwell] info n1: " + IN_message);
 /* next:then */
+
+===== core/MakeObject@1 (pure)
+// [n1] core/MakeObject@1
+(function(k0, v0, k1, v1, k2, v2, k3, v3) { var o = {}; if (k0 != "") o[k0] = v0; if (k1 != "") o[k1] = v1; if (k2 != "") o[k2] = v2; if (k3 != "") o[k3] = v3; return o; })(IN_key0, IN_value0, IN_key1, IN_value1, IN_key2, IN_value2, IN_key3, IN_value3)
+
+===== core/Max@1 (pure)
+// [n1] core/Max@1
+Math.max(IN_a, IN_b)
+
+===== core/Min@1 (pure)
+// [n1] core/Min@1
+Math.min(IN_a, IN_b)
+
+===== core/Modulo@1 (pure)
+// [n1] core/Modulo@1
+(isFinite(IN_a % IN_b) ? (IN_a % IN_b) : 0)
+
+===== core/Multiply@1 (pure)
+// [n1] core/Multiply@1
+(IN_a * IN_b)
 
 ===== core/Not@1 (pure)
 // [n1] core/Not@1
@@ -207,6 +309,8 @@ __g.t_n1 = setInterval(function() {
         __g.fail("n0", e);
     }
 }, 1 * 1000);
+if (__g.tm == undefined) __g.tm = {};
+__g.tm["" == "" ? "n1" : ""] = __g.t_n1;
 
 ===== core/OnValueChanged@1
 // [n1] core/OnValueChanged@1
@@ -239,6 +343,22 @@ IN_a || IN_b
 IN_target.gotoAndStop(1 + Math.round(Math.min(Math.max(IN_value, 0), 1) * (100 - 1)));
 /* next:then */
 
+===== core/Random@1 (pure)
+// [n1] core/Random@1
+(function(a, b, i) { return i ? a + Math.floor(Math.random() * (b - a + 1)) : a + Math.random() * (b - a); })(IN_min, IN_max, IN_integer)
+
+===== core/Replace@1 (pure)
+// [n1] core/Replace@1
+(IN_find == "" ? String(IN_text) : String(IN_text).split(IN_find).join(IN_replacement))
+
+===== core/Round@1 (pure)
+// [n1] core/Round@1
+(Math.round(IN_value) || 0)
+
+===== core/Select@1 (pure)
+// [n1] core/Select@1
+(IN_condition ? IN_ifTrue : IN_ifFalse)
+
 ===== core/Sequence@1
 // [n1] core/Sequence@1
 /* next:then0 */
@@ -256,6 +376,10 @@ IN_target._alpha = IN_alpha;
 IN_target.enabled = IN_enabled;
 /* next:then */
 
+===== core/SetField@1 (pure)
+// [n1] core/SetField@1
+(function(o, k, v) { var r = {}; for (var p in o) r[p] = o[p]; if (k != "") r[k] = v; return r; })(IN_object, IN_key, IN_value)
+
 ===== core/SetImage@1
 // [n1] core/SetImage@1
 IN_target.loadMovie(IN_url);
@@ -265,6 +389,11 @@ IN_target.loadMovie(IN_url);
 // [n1] core/SetPosition@1
 IN_target._x = IN_x;
 IN_target._y = IN_y;
+/* next:then */
+
+===== core/SetRotation@1
+// [n1] core/SetRotation@1
+IN_target._rotation = IN_degrees;
 /* next:then */
 
 ===== core/SetScale@1
@@ -298,6 +427,35 @@ __g.v_x = IN_value;
 IN_target._visible = IN_visible;
 /* next:then */
 
+===== core/Split@1 (pure)
+// [n1] core/Split@1
+String(IN_text).split(IN_separator)
+
+===== core/StopTimer@1
+// [n1] core/StopTimer@1
+if (__g.tm != undefined) clearInterval(__g.tm[""]);
+/* next:then */
+
+===== core/StopTweens@1
+// [n1] core/StopTweens@1
+if (__g.tw != undefined) {
+    for (var n1_i = __g.tw.length - 1; n1_i >= 0; n1_i--) {
+        if (__g.tw[n1_i].t == IN_target) {
+            clearInterval(__g.tw[n1_i].id);
+            __g.tw.splice(n1_i, 1);
+        }
+    }
+}
+/* next:then */
+
+===== core/Substring@1 (pure)
+// [n1] core/Substring@1
+String(IN_text).substr(IN_start, (IN_length < 0 ? 999999 : IN_length))
+
+===== core/Subtract@1 (pure)
+// [n1] core/Subtract@1
+(IN_a - IN_b)
+
 ===== core/Switch@1
 // [n1] core/Switch@1
 switch (IN_value) {
@@ -317,10 +475,18 @@ default:
     /* next:default */
 }
 
+===== core/TextLength@1 (pure)
+// [n1] core/TextLength@1
+String(IN_text).length
+
 ===== core/Throw@1
 // [n1] core/Throw@1
 throw { node: "n1", message: IN_message };
 /* next:then */
+
+===== core/ToLower@1 (pure)
+// [n1] core/ToLower@1
+String(IN_text).toLowerCase()
 
 ===== core/ToNumber@1 (pure)
 // [n1] core/ToNumber@1
@@ -330,6 +496,67 @@ throw { node: "n1", message: IN_message };
 // [n1] core/ToString@1
 String(IN_value)
 
+===== core/ToUpper@1 (pure)
+// [n1] core/ToUpper@1
+String(IN_text).toUpperCase()
+
+===== core/Toggle@1
+// [n1] core/Toggle@1
+__g.v_x = !(__g.v_x == true);
+var n1_value = __g.v_x == true;
+/* next:then */
+
 ===== core/Translate@1 (pure)
 // [n1] core/Translate@1
 IN_key
+
+===== core/Tween@1
+// [n1] core/Tween@1
+if (__g.tw == undefined) __g.tw = [];
+var n1_tg = IN_target;
+var n1_pr = "alpha";
+var n1_ea = "linear";
+var n1_from = IN_from;
+var n1_to = IN_to;
+var n1_ms = IN_seconds * 1000;
+var n1_set = function(v) {
+    if (n1_pr == "alpha") n1_tg._alpha = v;
+    else if (n1_pr == "x") n1_tg._x = v;
+    else if (n1_pr == "y") n1_tg._y = v;
+    else if (n1_pr == "scale") {
+        n1_tg._xscale = v;
+        n1_tg._yscale = v;
+    }
+    else n1_tg._rotation = v;
+};
+for (var n1_i = __g.tw.length - 1; n1_i >= 0; n1_i--) {
+    if (__g.tw[n1_i].t == n1_tg && __g.tw[n1_i].p == n1_pr) {
+        clearInterval(__g.tw[n1_i].id);
+        __g.tw.splice(n1_i, 1);
+    }
+}
+var n1_rec = { t: n1_tg, p: n1_pr, id: 0 };
+__g.tw.push(n1_rec);
+var n1_t0 = getTimer();
+n1_set(n1_from);
+n1_rec.id = setInterval(function() {
+    var k = (n1_ms > 0) ? (getTimer() - n1_t0) / n1_ms : 1;
+    if (!(k < 1)) k = 1;
+    var ez = k;
+    if (n1_ea == "easeIn") ez = k * k;
+    else if (n1_ea == "easeOut") ez = k * (2 - k);
+    else if (n1_ea == "easeInOut") ez = (k < 0.5) ? 2 * k * k : -1 + (4 - 2 * k) * k;
+    n1_set(n1_from + (n1_to - n1_from) * ez);
+    if (k == 1) {
+        clearInterval(n1_rec.id);
+        for (var j = __g.tw.length - 1; j >= 0; j--) {
+            if (__g.tw[j] == n1_rec) __g.tw.splice(j, 1);
+        }
+        try {
+            /* next:done */
+        } catch (e) {
+            __g.fail("n0", e);
+        }
+    }
+}, 33);
+/* next:then */

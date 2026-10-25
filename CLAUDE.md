@@ -19,5 +19,6 @@ Commands (yarn only): `yarn validate` (schemas, template files exist, placeholde
 - **Templates target Flash 8 AS2 as Skyrim's GFx runs it:** there is no `Error` class (throw strings or plain objects carrying the node ID) and no AS2 runtime `flash.filters`.
 - **Outputs coerce to pin defaults** (`undefined` Number → `0`, String → `""`); templates must never throw past the event handler's `try/catch`. The only template that throws on purpose is the Debug `Throw` node (`{node, message}`), for testing that handler.
 - **Pure nodes must be side-effect free,** since the compiler caches them per dependency scope.
-- **Milestones:** 0.2 ships events, flow, variables, logic/text, components and Log; data, list, animation and game-bridge nodes come in 0.3 with the runtime.
+- **Milestones:** 0.2 ships events, flow, variables, logic/text/math, components, Log and Assert, and (pulled forward by the owner, 2026-10-25, because they need no runtime) the Data and Animation nodes; List and Game bridge nodes come in 0.3 with the runtime. 88 nodes.
+- **Delay is retriggerable** (a second entry into the same Delay restarts its timer) and Cancel Delay / Stop Timer find timers by `name` or node id; see `docs/templates.md`. Items of Array and Object pins are untyped: nodes carry `valueType` and coerce (`docs/templates.md`, Untyped items).
 - **Generated output license:** core pack templates carry Inkwell's non-commercial terms, including the paywall rule. Keep the license notice in the repo.

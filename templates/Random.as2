@@ -1,0 +1,2 @@
+// [{{node.id}}] core/Random@1
+(function(a, b, i) { return i ? a + Math.floor(Math.random() * (b - a + 1)) : a + Math.random() * (b - a); })({{in.min}}, {{in.max}}, {{in.integer}})
