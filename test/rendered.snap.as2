@@ -16,7 +16,7 @@ IN_a && IN_b
 
 ===== core/ArrayGet@1 (pure)
 // [n1] core/ArrayGet@1
-(function(v, t) { if (t == "Number") return Number(v) || 0; if (t == "Bool") return v == true || v == "true"; if (t == "Array") return v instanceof Array ? v : []; if (t == "Object") return (typeof(v) == "object" && !(v instanceof Array)) ? v : {}; return v == undefined ? "" : String(v); })(IN_array[IN_index], "String")
+({ f: function(v, t) { if (t == "Number") return Number(v) || 0; if (t == "Bool") return v == true || v == "true"; if (t == "Array") return v instanceof Array ? v : []; if (t == "Object") return (typeof(v) == "object" && !(v instanceof Array)) ? v : {}; return v == undefined ? "" : String(v); } }).f(IN_array[IN_index], "String")
 
 ===== core/ArrayLength@1 (pure)
 // [n1] core/ArrayLength@1
@@ -24,11 +24,11 @@ IN_a && IN_b
 
 ===== core/ArrayPush@1 (pure)
 // [n1] core/ArrayPush@1
-(function(a, v) { var r = a instanceof Array ? a.concat() : []; r.push(v); return r; })(IN_array, IN_item)
+({ f: function(a, v) { var r = a instanceof Array ? a.concat() : []; r.push(v); return r; } }).f(IN_array, IN_item)
 
 ===== core/ArraySortByField@1 (pure)
 // [n1] core/ArraySortByField@1
-(function(a, f, d) { var r = a instanceof Array ? a.concat() : []; r.sort(function(x, y) { var p = x[f]; var q = y[f]; var c = (typeof(p) == "number" && typeof(q) == "number") ? p - q : (String(p) < String(q) ? -1 : (String(p) > String(q) ? 1 : 0)); return d ? -c : c; }); return r; })(IN_array, IN_field, IN_descending)
+({ f: function(a, f, d) { var r = a instanceof Array ? a.concat() : []; r.sort(function(x, y) { var p = x[f]; var q = y[f]; var c = (typeof(p) == "number" && typeof(q) == "number") ? p - q : (String(p) < String(q) ? -1 : (String(p) > String(q) ? 1 : 0)); return d ? -c : c; }); return r; } }).f(IN_array, IN_field, IN_descending)
 
 ===== core/Assert@1
 // [n1] core/Assert@1
@@ -157,7 +157,7 @@ String(Math.round(IN_value * Math.pow(10, 0)) / Math.pow(10, 0))
 
 ===== core/GetField@1 (pure)
 // [n1] core/GetField@1
-(function(v, t) { if (t == "Number") return Number(v) || 0; if (t == "Bool") return v == true || v == "true"; if (t == "Array") return v instanceof Array ? v : []; if (t == "Object") return (typeof(v) == "object" && !(v instanceof Array)) ? v : {}; return v == undefined ? "" : String(v); })(IN_object[IN_key], "String")
+({ f: function(v, t) { if (t == "Number") return Number(v) || 0; if (t == "Bool") return v == true || v == "true"; if (t == "Array") return v instanceof Array ? v : []; if (t == "Object") return (typeof(v) == "object" && !(v instanceof Array)) ? v : {}; return v == undefined ? "" : String(v); } }).f(IN_object[IN_key], "String")
 
 ===== core/GetPosition@1
 // [n1] core/GetPosition@1
@@ -179,7 +179,7 @@ __g.v_x
 
 ===== core/Join@1 (pure)
 // [n1] core/Join@1
-(function(a, s) { return a instanceof Array ? a.join(s) : ""; })(IN_array, IN_separator)
+({ f: function(a, s) { return a instanceof Array ? a.join(s) : ""; } }).f(IN_array, IN_separator)
 
 ===== core/Lerp@1 (pure)
 // [n1] core/Lerp@1
@@ -192,7 +192,7 @@ trace("[Inkwell] info n1: " + IN_message);
 
 ===== core/MakeObject@1 (pure)
 // [n1] core/MakeObject@1
-(function(k0, v0, k1, v1, k2, v2, k3, v3) { var o = {}; if (k0 != "") o[k0] = v0; if (k1 != "") o[k1] = v1; if (k2 != "") o[k2] = v2; if (k3 != "") o[k3] = v3; return o; })(IN_key0, IN_value0, IN_key1, IN_value1, IN_key2, IN_value2, IN_key3, IN_value3)
+({ f: function(k0, v0, k1, v1, k2, v2, k3, v3) { var o = {}; if (k0 != "") o[k0] = v0; if (k1 != "") o[k1] = v1; if (k2 != "") o[k2] = v2; if (k3 != "") o[k3] = v3; return o; } }).f(IN_key0, IN_value0, IN_key1, IN_value1, IN_key2, IN_value2, IN_key3, IN_value3)
 
 ===== core/Max@1 (pure)
 // [n1] core/Max@1
@@ -345,7 +345,7 @@ IN_target.gotoAndStop(1 + Math.round(Math.min(Math.max(IN_value, 0), 1) * (100 -
 
 ===== core/Random@1 (pure)
 // [n1] core/Random@1
-(function(a, b, i) { return i ? a + Math.floor(Math.random() * (b - a + 1)) : a + Math.random() * (b - a); })(IN_min, IN_max, IN_integer)
+({ f: function(a, b, i) { return i ? a + Math.floor(Math.random() * (b - a + 1)) : a + Math.random() * (b - a); } }).f(IN_min, IN_max, IN_integer)
 
 ===== core/Replace@1 (pure)
 // [n1] core/Replace@1
@@ -378,7 +378,7 @@ IN_target.enabled = IN_enabled;
 
 ===== core/SetField@1 (pure)
 // [n1] core/SetField@1
-(function(o, k, v) { var r = {}; for (var p in o) r[p] = o[p]; if (k != "") r[k] = v; return r; })(IN_object, IN_key, IN_value)
+({ f: function(o, k, v) { var r = {}; for (var p in o) r[p] = o[p]; if (k != "") r[k] = v; return r; } }).f(IN_object, IN_key, IN_value)
 
 ===== core/SetImage@1
 // [n1] core/SetImage@1

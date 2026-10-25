@@ -40,7 +40,7 @@ Rules:
 - inlines it, wrapped in parentheses unless atomic, when the output feeds one consumer, or
 - emits `var <temp> = <expr>;` before the first consumer when it feeds several, cached per dependency scope (once per event run, or once per loop iteration if it depends on `{{out.item}}` or `{{out.index}}` of a loop).
 - A node with `extra.volatile: true` (Get Variable, Get Text, Get Alpha, Get Visible, Random) reads mutable state or a different value on every evaluation and is never cached: it is always inlined, so it sees writes made earlier in the same run (and two Random consumers get two numbers). Counter and Get Position are exec nodes, so their values are locals of the run, not pure reads.
-- Pure nodes that need statements (Array Push, Sort By Field, Make Object, Set Field, Random, Join) wrap them in one function expression, `(function(a, b) { ... })(<inputs>)`. Array Push, Set Field and Sort By Field return a **new** array or object: the input is never changed.
+- Pure nodes that need statements (Array Push, Sort By Field, Make Object, Set Field, Random, Join) wrap them in one function expression called as a method of an object literal, `({ f: function(a, b) { ... } }).f(<inputs>)` (not `(function(a, b) {...})(x, y)`: FFDec's AS2 compiler turns a direct call of a function expression into a call that returns `undefined`, seen in Ruffle). Array Push, Set Field and Sort By Field return a **new** array or object: the input is never changed.
 
 ## Events (entry nodes, `extra.entry: true`)
 
