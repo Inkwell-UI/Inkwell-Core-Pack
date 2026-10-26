@@ -45,6 +45,12 @@ if (IN_condition) {
     /* next:false */
 }
 
+===== core/CallRuntime@1
+// [n1] core/CallRuntime@1
+var r_n1 = __g.bridge.callRuntime(IN_name, IN_arg);
+var n1_result = r_n1 == undefined ? "" : String(r_n1);
+/* next:then */
+
 ===== core/CancelDelay@1
 // [n1] core/CancelDelay@1
 if (__g.dl != undefined) clearInterval(__g.dl[""]);
@@ -57,6 +63,11 @@ if (__g.dl != undefined) clearInterval(__g.dl[""]);
 ===== core/Clamp@1 (pure)
 // [n1] core/Clamp@1
 Math.min(Math.max(IN_value, IN_min), IN_max)
+
+===== core/CloseMenu@1
+// [n1] core/CloseMenu@1
+var n1_closed = __g.bridge.closeMenu(IN_menu) == true;
+/* next:then */
 
 ===== core/Compare@1 (pure)
 // [n1] core/Compare@1
@@ -159,11 +170,30 @@ String(Math.round(IN_value * Math.pow(10, 0)) / Math.pow(10, 0))
 // [n1] core/GetField@1
 ({ f: function(v, t) { if (t == "Number") return Number(v) || 0; if (t == "Bool") return v == true || v == "true"; if (t == "Array") return v instanceof Array ? v : []; if (t == "Object") return (typeof(v) == "object" && !(v instanceof Array)) ? v : {}; return v == undefined ? "" : String(v); } }).f(IN_object[IN_key], "String")
 
+===== core/GetInputDevice@1
+// [n1] core/GetInputDevice@1
+var n1_device = __g.bridge.getInputDevice() == "gamepad" ? "gamepad" : "keyboardMouse";
+var n1_gamepad = n1_device == "gamepad";
+/* next:then */
+
 ===== core/GetPosition@1
 // [n1] core/GetPosition@1
 var n1_x = Number(IN_target._x) || 0;
 var n1_y = Number(IN_target._y) || 0;
 /* next:then */
+
+===== core/GetSelected@1
+// [n1] core/GetSelected@1
+var n1_index = Number(IN_target.getSelectedIndex());
+if (isNaN(n1_index) || n1_index < 0) n1_index = -1;
+var i_n1 = n1_index < 0 ? undefined : IN_target.getItem(n1_index);
+var n1_found = typeof i_n1 == "object" && i_n1 != null;
+var n1_item = n1_found ? i_n1 : {};
+/* next:then */
+
+===== core/GetSetting@1 (pure)
+// [n1] core/GetSetting@1
+({ f: function(v) { return v == undefined ? "" : String(v); } }).f(__g.bridge.getSetting(IN_section, IN_key, IN_default))
 
 ===== core/GetText@1 (pure)
 // [n1] core/GetText@1
@@ -287,6 +317,18 @@ __g.onLoad = function() {
     }
 };
 
+===== core/OnModEvent@1
+// [n1] core/OnModEvent@1
+__g.addModEventHandler("", function(strArg, numArg) {
+    var n1_strArg = strArg == undefined ? "" : String(strArg);
+    var n1_numArg = Number(numArg) || 0;
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+});
+
 ===== core/OnOpen@1
 // [n1] core/OnOpen@1
 __g.onOpen = function() {
@@ -296,6 +338,20 @@ __g.onOpen = function() {
         __g.fail("n0", e);
     }
 };
+
+===== core/OnRuntimeMessage@1
+// [n1] core/OnRuntimeMessage@1
+__g.addMessageHandler("", function(name, text, number, flag) {
+    var n1_name = name == undefined ? "" : String(name);
+    var n1_text = text == undefined ? "" : String(text);
+    var n1_number = Number(number) || 0;
+    var n1_flag = flag == true;
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+});
 
 ===== core/OnTimer@1
 // [n1] core/OnTimer@1
@@ -334,9 +390,19 @@ __g.Show = function(n1_title:String, n1_hold:Number) {
     }
 };
 
+===== core/OpenMenu@1
+// [n1] core/OpenMenu@1
+var n1_opened = __g.bridge.openMenu(IN_menu) == true;
+/* next:then */
+
 ===== core/Or@1 (pure)
 // [n1] core/Or@1
 IN_a || IN_b
+
+===== core/PlaySound@1
+// [n1] core/PlaySound@1
+var n1_played = __g.bridge.playSound(IN_sound) == true;
+/* next:then */
 
 ===== core/ProgressSetValue@1
 // [n1] core/ProgressSetValue@1
@@ -346,6 +412,11 @@ IN_target.gotoAndStop(1 + Math.round(Math.min(Math.max(IN_value, 0), 1) * (100 -
 ===== core/Random@1 (pure)
 // [n1] core/Random@1
 ({ f: function(a, b, i) { return i ? a + Math.floor(Math.random() * (b - a + 1)) : a + Math.random() * (b - a); } }).f(IN_min, IN_max, IN_integer)
+
+===== core/Refresh@1
+// [n1] core/Refresh@1
+IN_target.refresh();
+/* next:then */
 
 ===== core/Replace@1 (pure)
 // [n1] core/Replace@1
@@ -358,6 +429,11 @@ IN_target.gotoAndStop(1 + Math.round(Math.min(Math.max(IN_value, 0), 1) * (100 -
 ===== core/Select@1 (pure)
 // [n1] core/Select@1
 (IN_condition ? IN_ifTrue : IN_ifFalse)
+
+===== core/SendModEvent@1
+// [n1] core/SendModEvent@1
+__g.bridge.sendModEvent(IN_event, IN_strArg, IN_numArg);
+/* next:then */
 
 ===== core/Sequence@1
 // [n1] core/Sequence@1
@@ -383,6 +459,11 @@ IN_target.enabled = IN_enabled;
 ===== core/SetImage@1
 // [n1] core/SetImage@1
 IN_target.loadMovie(IN_url);
+/* next:then */
+
+===== core/SetItems@1
+// [n1] core/SetItems@1
+IN_target.setItems(IN_items instanceof Array ? IN_items : []);
 /* next:then */
 
 ===== core/SetPosition@1
