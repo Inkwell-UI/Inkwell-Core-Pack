@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0 (115 nodes, 112 with a template)
+
+Math nodes (pure, Logic; a non-finite result is 0 like Divide): Sin, Cos, Tan, Asin, Acos, Atan, Atan2 (y, x), Sqrt, Power, Exp, Ln, Log Base (value, base), Degrees To Radians, Radians To Degrees, Sign. Angles are in radians.
+
 ## 0.3.0 (100 nodes, 97 with a template)
 
 Runtime nodes (all `requiresRuntime: true`; they work only in a custom menu served by Inkwell Runtime, `compatible.runtimeApi` `>=0.3.0`):

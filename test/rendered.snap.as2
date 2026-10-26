@@ -2,6 +2,10 @@
 // [n1] core/Abs@1
 (Math.abs(IN_value) || 0)
 
+===== core/Acos@1 (pure)
+// [n1] core/Acos@1
+(isFinite(Math.acos(IN_value)) ? (Math.acos(IN_value)) : 0)
+
 ===== core/Add@1 (pure)
 // [n1] core/Add@1
 (IN_a + IN_b)
@@ -30,12 +34,24 @@ IN_a && IN_b
 // [n1] core/ArraySortByField@1
 ({ f: function(a, f, d) { var r = a instanceof Array ? a.concat() : []; r.sort(function(x, y) { var p = x[f]; var q = y[f]; var c = (typeof(p) == "number" && typeof(q) == "number") ? p - q : (String(p) < String(q) ? -1 : (String(p) > String(q) ? 1 : 0)); return d ? -c : c; }); return r; } }).f(IN_array, IN_field, IN_descending)
 
+===== core/Asin@1 (pure)
+// [n1] core/Asin@1
+(isFinite(Math.asin(IN_value)) ? (Math.asin(IN_value)) : 0)
+
 ===== core/Assert@1
 // [n1] core/Assert@1
 if (!IN_condition) {
     throw { node: "n1", message: "Assert failed: " + IN_message };
 }
 /* next:then */
+
+===== core/Atan@1 (pure)
+// [n1] core/Atan@1
+(isFinite(Math.atan(IN_value)) ? (Math.atan(IN_value)) : 0)
+
+===== core/Atan2@1 (pure)
+// [n1] core/Atan2@1
+(isFinite(Math.atan2(IN_y, IN_x)) ? (Math.atan2(IN_y, IN_x)) : 0)
 
 ===== core/Branch@1
 // [n1] core/Branch@1
@@ -77,6 +93,10 @@ IN_a == IN_b
 // [n1] core/Concat@1
 String(IN_a) + String(IN_b)
 
+===== core/Cos@1 (pure)
+// [n1] core/Cos@1
+(isFinite(Math.cos(IN_value)) ? (Math.cos(IN_value)) : 0)
+
 ===== core/Counter@1
 // [n1] core/Counter@1
 if (__g.ctr == undefined) __g.ctr = {};
@@ -85,6 +105,10 @@ if ("increment" == "increment") __g.ctr["counter"] += IN_by;
 else if ("increment" == "reset") __g.ctr["counter"] = 0;
 var n1_value = Number(__g.ctr["counter"]) || 0;
 /* next:then */
+
+===== core/DegreesToRadians@1 (pure)
+// [n1] core/DegreesToRadians@1
+(isFinite((IN_value * Math.PI / 180)) ? ((IN_value * Math.PI / 180)) : 0)
 
 ===== core/Delay@1
 // [n1] core/Delay@1
@@ -110,6 +134,10 @@ if (!__g.s_n1) {
     __g.s_n1 = true;
     /* next:then */
 }
+
+===== core/Exp@1 (pure)
+// [n1] core/Exp@1
+(isFinite(Math.exp(IN_value)) ? (Math.exp(IN_value)) : 0)
 
 ===== core/Fade@1
 // [n1] core/Fade@1
@@ -215,10 +243,18 @@ __g.v_x
 // [n1] core/Lerp@1
 IN_a + (IN_b - IN_a) * IN_t
 
+===== core/Ln@1 (pure)
+// [n1] core/Ln@1
+(isFinite(Math.log(IN_value)) ? (Math.log(IN_value)) : 0)
+
 ===== core/Log@1
 // [n1] core/Log@1
 trace("[Inkwell] info n1: " + IN_message);
 /* next:then */
+
+===== core/LogBase@1 (pure)
+// [n1] core/LogBase@1
+(isFinite((Math.log(IN_value) / Math.log(IN_base))) ? ((Math.log(IN_value) / Math.log(IN_base))) : 0)
 
 ===== core/MakeObject@1 (pure)
 // [n1] core/MakeObject@1
@@ -404,10 +440,18 @@ IN_a || IN_b
 var n1_played = __g.bridge.playSound(IN_sound) == true;
 /* next:then */
 
+===== core/Power@1 (pure)
+// [n1] core/Power@1
+(isFinite(Math.pow(IN_base, IN_exponent)) ? (Math.pow(IN_base, IN_exponent)) : 0)
+
 ===== core/ProgressSetValue@1
 // [n1] core/ProgressSetValue@1
 IN_target.gotoAndStop(1 + Math.round(Math.min(Math.max(IN_value, 0), 1) * (100 - 1)));
 /* next:then */
+
+===== core/RadiansToDegrees@1 (pure)
+// [n1] core/RadiansToDegrees@1
+(isFinite((IN_value * 180 / Math.PI)) ? ((IN_value * 180 / Math.PI)) : 0)
 
 ===== core/Random@1 (pure)
 // [n1] core/Random@1
@@ -508,9 +552,21 @@ __g.v_x = IN_value;
 IN_target._visible = IN_visible;
 /* next:then */
 
+===== core/Sign@1 (pure)
+// [n1] core/Sign@1
+(isFinite((IN_value > 0 ? 1 : (IN_value < 0 ? -1 : 0))) ? ((IN_value > 0 ? 1 : (IN_value < 0 ? -1 : 0))) : 0)
+
+===== core/Sin@1 (pure)
+// [n1] core/Sin@1
+(isFinite(Math.sin(IN_value)) ? (Math.sin(IN_value)) : 0)
+
 ===== core/Split@1 (pure)
 // [n1] core/Split@1
 String(IN_text).split(IN_separator)
+
+===== core/Sqrt@1 (pure)
+// [n1] core/Sqrt@1
+(isFinite(Math.sqrt(IN_value)) ? (Math.sqrt(IN_value)) : 0)
 
 ===== core/StopTimer@1
 // [n1] core/StopTimer@1
@@ -555,6 +611,10 @@ case "":
 default:
     /* next:default */
 }
+
+===== core/Tan@1 (pure)
+// [n1] core/Tan@1
+(isFinite(Math.tan(IN_value)) ? (Math.tan(IN_value)) : 0)
 
 ===== core/TextLength@1 (pure)
 // [n1] core/TextLength@1
