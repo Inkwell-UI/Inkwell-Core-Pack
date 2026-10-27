@@ -2,6 +2,8 @@
 
 ## 0.4.0 (116 nodes, 113 with a template)
 
+Delay and Cancel Delay carry editor metadata so the preview can show a Delay's progress: `extra.timer` (the input holding the seconds) and `extra.timerKey` (the field that names the timer) on Delay, `extra.cancelsTimer` (the field naming the timer to cancel) on Cancel Delay. Templates and behavior are unchanged.
+
 Call Widget (Events, `core/CallWidget@1`): runs the On Widget Call node of the same graph with the given `name`, so one handler can be reused from other events. Fields `name` and `params` (`[{name, type}]`, copy of the handler's parameters); `params` becomes data inputs (`extra.dynamicInputs`), template placeholder `{{args}}`. Exec in, `then` out; the handler runs synchronously and returns nothing. The editor lints a missing handler, differing parameter types and a call that leads back into its own handler (`graph-widget-call`).
 
 Math nodes (pure, Logic; a non-finite result is 0 like Divide): Sin, Cos, Tan, Asin, Acos, Atan, Atan2 (y, x), Sqrt, Power, Exp, Ln, Log Base (value, base), Degrees To Radians, Radians To Degrees, Sign. Angles are in radians.
