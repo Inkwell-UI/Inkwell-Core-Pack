@@ -2,7 +2,7 @@
 
 ## 0.4.0 (116 nodes, 113 with a template)
 
-Delay and Cancel Delay carry editor metadata so the preview can show a Delay's progress: `extra.timer` (the input holding the seconds) and `extra.timerKey` (the field that names the timer) on Delay, `extra.cancelsTimer` (the field naming the timer to cancel) on Cancel Delay. Templates and behavior are unchanged.
+Timer nodes carry editor metadata so the editor can show their progress (preview and Dev Mode): `extra.timer` (the input or field holding the seconds) on Delay, Tween, Fade and On Timer, `extra.timerKey` (the field that names the timer) on Delay and On Timer, `extra.timerRepeat` (the Bool field that makes it tick again) on On Timer, `extra.cancelsTimer` (the field naming the timer to cancel) on Cancel Delay and Stop Timer. Templates and behavior are unchanged.
 
 Call Widget (Events, `core/CallWidget@1`): runs the On Widget Call node of the same graph with the given `name`, so one handler can be reused from other events. Fields `name` and `params` (`[{name, type}]`, copy of the handler's parameters); `params` becomes data inputs (`extra.dynamicInputs`), template placeholder `{{args}}`. Exec in, `then` out; the handler runs synchronously and returns nothing. The editor lints a missing handler, differing parameter types and a call that leads back into its own handler (`graph-widget-call`).
 
