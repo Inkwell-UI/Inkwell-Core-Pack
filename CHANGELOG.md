@@ -6,6 +6,8 @@ Timer nodes carry editor metadata so the editor can show their progress (preview
 
 Call Widget (Events, `core/CallWidget@1`): runs the On Widget Call node of the same graph with the given `name`, so one handler can be reused from other events. Fields `name` and `params` (`[{name, type}]`, copy of the handler's parameters); `params` becomes data inputs (`extra.dynamicInputs`), template placeholder `{{args}}`. Exec in, `then` out; the handler runs synchronously and returns nothing. The editor lints a missing handler, differing parameter types and a call that leads back into its own handler (`graph-widget-call`).
 
+Format Number gains the field `digits` (listed above `decimals`, 0..6, default 0): it pads the whole-number part with leading zeros, so 9.3 with `decimals` 0 and `digits` 2 gives `09` (clocks, `mm:ss`). The default changes nothing; a negative number keeps its sign in front of the padding.
+
 Math nodes (pure, Logic; a non-finite result is 0 like Divide): Sin, Cos, Tan, Asin, Acos, Atan, Atan2 (y, x), Sqrt, Power, Exp, Ln, Log Base (value, base), Degrees To Radians, Radians To Degrees, Sign. Angles are in radians.
 
 ## 0.3.0 (100 nodes, 97 with a template)
