@@ -232,6 +232,10 @@ var n1_item = n1_found ? i_n1 : {};
 // [n1] core/GetText@1
 (IN_target.text == undefined ? "" : String(IN_target.text))
 
+===== core/GetTime@1 (pure)
+// [n1] core/GetTime@1
+getTimer() / 1000
+
 ===== core/GetVariable@1 (pure)
 // [n1] core/GetVariable@1
 __g.v_x
@@ -406,6 +410,22 @@ __g.t_n1 = setInterval(function() {
         __g.fail("n0", e);
     }
 }, 1 * 1000);
+if (__g.tm == undefined) __g.tm = {};
+__g.tm["" == "" ? "n1" : ""] = __g.t_n1;
+
+===== core/OnUpdate@1
+// [n1] core/OnUpdate@1
+__g.s_n1 = getTimer();
+__g.t_n1 = setInterval(function() {
+    var now = getTimer();
+    var n1_delta = (now - __g.s_n1) / 1000;
+    __g.s_n1 = now;
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+}, 0.1 * 1000);
 if (__g.tm == undefined) __g.tm = {};
 __g.tm["" == "" ? "n1" : ""] = __g.t_n1;
 

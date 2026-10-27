@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.0 (118 nodes, 115 with a template)
+
+Get Time (Logic, `core/GetTime@1`, pure and volatile): the seconds since the movie started, from `getTimer()` (milliseconds / 1000). Volatile, so it is never cached: two reads in one run can differ. Use differences of two readings for durations (a clock: store the start time in a variable, subtract it later).
+
+On Update (Events, `core/OnUpdate@1`): a rate-limited event that runs every `seconds` (field, default 0.1, minimum 0.05) from `setInterval`; the output `delta` is the measured time since the previous update in seconds (from `getTimer()`, so a late tick reports its real gap). It is deliberately **not per frame**: in a custom menu `onEnterFrame` fires about 700 times a second while the game is paused (SPEC-CHANGES V13.4), so a frame event would burn the CPU and a frame count is no clock. Optional `name` field: Stop Timer with that name (or the node id) stops the updates, like On Timer.
+
 ## 0.4.0 (116 nodes, 113 with a template)
 
 Timer nodes carry editor metadata so the editor can show their progress (preview and Dev Mode): `extra.timer` (the input or field holding the seconds) on Delay, Tween, Fade and On Timer, `extra.timerKey` (the field that names the timer) on Delay and On Timer, `extra.timerRepeat` (the Bool field that makes it tick again) on On Timer, `extra.cancelsTimer` (the field naming the timer to cancel) on Cancel Delay and Stop Timer. Templates and behavior are unchanged.
