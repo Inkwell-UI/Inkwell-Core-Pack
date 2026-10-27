@@ -27,10 +27,13 @@ export const placeholders = (text) => [...text.matchAll(PH)].map((m) => ({ kind:
 /** Dynamic output pins (On Widget Call params) come from the field named by def.extra.dynamicOutputs. */
 const dynOut = (def, fields) => (def.extra?.dynamicOutputs ? fields[def.extra.dynamicOutputs] ?? [] : []);
 
+/** Dynamic input pins (Call Widget args) come from the field named by def.extra.dynamicInputs. */
+const dynIn = (def, fields) => (def.extra?.dynamicInputs ? fields[def.extra.dynamicInputs] ?? [] : []);
+
 export function fixtureFields(def) {
   const f = {};
   for (const [k, s] of Object.entries(def.fields)) f[k] = s.default ?? s.enum?.[0] ?? (s.type === "number" || s.type === "integer" ? 0 : s.type === "boolean" ? false : "");
-  if (def.kind === "OnWidgetCall") f.params = [{ name: "title", type: "String" }, { name: "hold", type: "Number" }];
+  if (def.kind === "OnWidgetCall" || def.kind === "CallWidget") f.params = [{ name: "title", type: "String" }, { name: "hold", type: "Number" }];
   return f;
 }
 
@@ -53,6 +56,7 @@ export function render(def, text, fields = fixtureFields(def)) {
       case "raw": return String(fields[name]);
       case "var": return `__g.v_${fields[name] || "x"}`;
       case "params": return dynOut(def, fields).map((p) => `${uid}_${p.name}:${AS2_TYPE[p.type]}`).join(", ");
+      case "args": return dynIn(def, fields).map((p) => `IN_${p.name}`).join(", ");
       default: throw new Error(`unknown placeholder {{${k}${name ? "." + name : ""}}}`);
     }
   });
@@ -75,7 +79,8 @@ export function checkTemplate(def, text) {
     else if ((p.kind === "next" || p.kind === "guarded") && !pins(def.outputs, true).includes(p.name)) bad("no such exec output");
     else if (["field", "raw", "var"].includes(p.kind) && !(p.name in def.fields)) bad("no such field");
     else if (p.kind === "params" && !def.extra?.dynamicOutputs) bad("needs extra.dynamicOutputs");
-    else if (!["node", "in", "out", "next", "guarded", "field", "raw", "var", "params"].includes(p.kind)) bad("unknown placeholder kind");
+    else if (p.kind === "args" && !def.extra?.dynamicInputs) bad("needs extra.dynamicInputs");
+    else if (!["node", "in", "out", "next", "guarded", "field", "raw", "var", "params", "args"].includes(p.kind)) bad("unknown placeholder kind");
   }
   for (const n of pins(def.inputs, false)) if (!count("in", n)) errs.push(`data input '${n}' is never used`);
   for (const n of pins(def.outputs, true)) if (count("next", n) + count("guarded", n) !== 1) errs.push(`exec output '${n}' must be placed exactly once`);

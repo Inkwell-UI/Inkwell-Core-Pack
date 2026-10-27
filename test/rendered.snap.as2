@@ -67,6 +67,11 @@ var r_n1 = __g.bridge.callRuntime(IN_name, IN_arg);
 var n1_result = r_n1 == undefined ? "" : String(r_n1);
 /* next:then */
 
+===== core/CallWidget@1
+// [n1] core/CallWidget@1
+if (__g.Show != undefined) __g.Show(IN_title, IN_hold);
+/* next:then */
+
 ===== core/CancelDelay@1
 // [n1] core/CancelDelay@1
 if (__g.dl != undefined) clearInterval(__g.dl[""]);

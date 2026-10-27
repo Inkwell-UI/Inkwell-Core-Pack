@@ -24,6 +24,7 @@ Syntax `{{kind.name}}` (or `{{params}}`). Never write two `{` in a row anywhere 
 | `{{next.<execOut>}}` | the statements that follow exec output `<execOut>` |
 | `{{guarded.<execOut>}}` | the same statements wrapped in `try { ... } catch (e) { __g.fail("<entry node id>", e); }` |
 | `{{params}}` | On Widget Call only: the typed parameter list built from `fields.params` |
+| `{{args}}` | Call Widget only: the data inputs built from `fields.params` (`extra.dynamicInputs`), in order, as a comma-separated argument list; an unconnected input holds its type's default |
 
 Rules:
 - Every exec output pin appears exactly once, as `next` or `guarded`, on its own line. Codegen re-indents the multi-line substitution to that line's indentation. An exec output with no wire renders as nothing.
@@ -44,7 +45,7 @@ Rules:
 
 ## Events (entry nodes, `extra.entry: true`)
 
-No exec input. The template is a registration statement that codegen places in the graph class `init()`; the continuation goes inside the handler as `{{guarded.then}}`, so a handler failure is logged with the entry node id and never escapes. Data outputs (On Value Changed `value`, On Item Selected `index`/`item`) are locals declared at the top of the handler. On Widget Call: `fields.name` and `fields.params` (`[{name, type}]`, type String, Number or Bool) define the handler `__g.<name> = function(<params>) {...}` and, later, the Papyrus function. Its data output pins are the params (`extra.dynamicOutputs: "params"`), so the editor derives the pin list from the field.
+No exec input. The template is a registration statement that codegen places in the graph class `init()`; the continuation goes inside the handler as `{{guarded.then}}`, so a handler failure is logged with the entry node id and never escapes. Data outputs (On Value Changed `value`, On Item Selected `index`/`item`) are locals declared at the top of the handler. On Widget Call: `fields.name` and `fields.params` (`[{name, type}]`, type String, Number or Bool) define the handler `__g.<name> = function(<params>) {...}` and, later, the Papyrus function. Its data output pins are the params (`extra.dynamicOutputs: "params"`), so the editor derives the pin list from the field. **Call Widget** (exec node, not an entry) is the other way round: `__g.<name>(<args>)` runs that handler of the same graph (`__g` is the graph instance, so a handler in another graph is out of reach). Its `params` field mirrors the handler's and its inputs are `extra.dynamicInputs: "params"`; a parameter named `name` or `params` would read the node's own field as its value, so avoid those two names. The call is guarded by `!= undefined` (a missing handler does nothing at runtime; the editor lint reports it).
 
 ## Dynamic pin types
 
