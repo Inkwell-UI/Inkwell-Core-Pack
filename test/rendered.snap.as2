@@ -244,6 +244,109 @@ __g.v_x
 // [n1] core/GetVisible@1
 (IN_target._visible == true)
 
+===== core/InventoryCloseMenu@1
+// [n1] core/InventoryCloseMenu@1
+if (IN_tween) _root.inkwellContract.send("CloseTweenMenu", []);
+_root.inkwellContract.send("CloseMenu", []);
+/* next:then */
+
+===== core/InventoryItemDrop@1
+// [n1] core/InventoryItemDrop@1
+_root.inkwellContract.select(IN_index);
+_root.inkwellContract.send("ItemDrop", [IN_amount]);
+/* next:then */
+
+===== core/InventoryItemSelect@1
+// [n1] core/InventoryItemSelect@1
+_root.inkwellContract.select(IN_index);
+_root.inkwellContract.send("ItemSelect", IN_slot >= 0 ? [IN_slot] : []);
+/* next:then */
+
+===== core/InventoryOnDropItem@1
+// [n1] core/InventoryOnDropItem@1
+_root.inkwellContract.on("DropItem", function() {
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+});
+
+===== core/InventoryOnInvalidateList@1
+// [n1] core/InventoryOnInvalidateList@1
+_root.inkwellContract.on("InvalidateListData", function() {
+    var n1_items = _root.inkwellContract.list.entryList;
+    if (!(n1_items instanceof Array)) n1_items = [];
+    var n1_count = n1_items.length;
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+});
+
+===== core/InventoryOnItemCard@1
+// [n1] core/InventoryOnItemCard@1
+_root.inkwellContract.on("UpdateItemCardInfo", function() {
+    var n1_info = typeof (arguments[0]) == "object" ? arguments[0] : {};
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+});
+
+===== core/InventoryOnPlayerInfo@1
+// [n1] core/InventoryOnPlayerInfo@1
+_root.inkwellContract.on("UpdatePlayerInfo", function() {
+    var n1_info = typeof (arguments[0]) == "object" ? arguments[0] : {};
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+});
+
+===== core/InventoryOnRestoreIndices@1
+// [n1] core/InventoryOnRestoreIndices@1
+_root.inkwellContract.on("RestoreIndices", function() {
+    var n1_indices = [];
+    for (var k = 0; k < arguments.length; k++) n1_indices.push(arguments[k]);
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+});
+
+===== core/InventoryOnSetCategories@1
+// [n1] core/InventoryOnSetCategories@1
+_root.inkwellContract.on("SetCategoriesList", function() {
+    var n1_categories = [];
+    for (var k = 0; k + 2 < arguments.length; k += 3) n1_categories.push({ text: String(arguments[k]), flag: Number(arguments[k + 1]) || 0, dontHide: arguments[k + 2] == true });
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+});
+
+===== core/InventoryPlaySound@1
+// [n1] core/InventoryPlaySound@1
+_root.inkwellContract.send("PlaySound", [String(IN_sound)]);
+/* next:then */
+
+===== core/InventoryRequestItemCard@1
+// [n1] core/InventoryRequestItemCard@1
+_root.inkwellContract.select(IN_index);
+_root.inkwellContract.send("RequestItemCardInfo", [], "UpdateItemCardInfo");
+/* next:then */
+
+===== core/InventorySaveIndices@1
+// [n1] core/InventorySaveIndices@1
+_root.inkwellContract.send("SaveIndices", [IN_indices instanceof Array ? IN_indices : []]);
+/* next:then */
+
 ===== core/Join@1 (pure)
 // [n1] core/Join@1
 ({ f: function(a, s) { return a instanceof Array ? a.join(s) : ""; } }).f(IN_array, IN_separator)

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.1 (130 nodes, 127 with a template)
+
+Inventory contract nodes (category Inventory, `extra.contract: "InventoryMenu"`; only usable in a menu replacement whose target contract is `InventoryMenu`, SPEC-CHANGES W5; no Inkwell Runtime needed). They call the replacement glue the editor generates at `_root.inkwellContract` (`docs/templates.md`, Contract nodes).
+- Events (engine callbacks): Inventory: On Set Categories (`categories`: `{text, flag, dontHide}` per category), On Invalidate List (`items` = the list's `entryList`, `count`), On Player Info (`info`), On Restore Indices (`indices`), On Drop Item, On Item Card (`info`; the answer to Request Item Card).
+- Actions (engine calls): Inventory: Item Select (`index`, `slot`; -1 = keep the current selection / no slot), Item Drop (`index`, `amount` 1), Save Indices (`indices`), Close Menu (`tween`: CloseTweenMenu first), Play Sound (`sound`, default `UIMenuFocus`), Request Item Card (`index`).
+
 ## 0.5.0 (118 nodes, 115 with a template)
 
 Get Time (Logic, `core/GetTime@1`, pure and volatile): the seconds since the movie started, from `getTimer()` (milliseconds / 1000). Volatile, so it is never cached: two reads in one run can differ. Use differences of two readings for durations (a clock: store the start time in a variable, subtract it later).
