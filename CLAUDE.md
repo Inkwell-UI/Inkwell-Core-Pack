@@ -8,7 +8,7 @@ The core visual-scripting nodes for Inkwell, released on its own schedule. The f
 - `docs/templates.md`: the template format (placeholders, pure nodes, loops, Delay, error convention). Read it before touching a template.
 - `scripts/lib.mjs` (loader and a minimal test renderer; the real renderer is the editor's codegen), `scripts/validate.mjs`, `test/` (snapshot of every rendered template).
 
-Commands (yarn only): `yarn validate` (schemas, template files exist, placeholders match pins), `yarn test` (`UPDATE=1 yarn test` rewrites `test/rendered.snap.as2`; review the diff). `inkwell-spec` is a `link:../Inkwell-Spec` dev dependency: run `yarn build` there after schema changes. Changing a template or pin means updating the snapshot and `CHANGELOG.md`.
+Commands (yarn only): `yarn validate` (schemas, template files exist, placeholders match pins; `node scripts/validate.mjs <packDir>` checks any pack; the pack template `Inkwell-Pack-Template` runs it and imports `scripts/lib.mjs` for its tests, so keep both pack-agnostic: the header uses the manifest id). Pack authors read `docs/packs.md`., `yarn test` (`UPDATE=1 yarn test` rewrites `test/rendered.snap.as2`; review the diff). `inkwell-spec` is a `link:../Inkwell-Spec` dev dependency: run `yarn build` there after schema changes. Changing a template or pin means updating the snapshot and `CHANGELOG.md`.
 
 ## Rules that are easy to break
 

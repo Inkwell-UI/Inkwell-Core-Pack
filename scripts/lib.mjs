@@ -11,7 +11,8 @@ export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "
 export function loadPack(dir = root) {
   const manifest = PackManifest.parse(JSON.parse(fs.readFileSync(path.join(dir, "manifest.json"), "utf8")));
   const nodes = fs.readdirSync(path.join(dir, "nodes")).filter((f) => f.endsWith(".json")).sort().map((file) => {
-    const def = NodeDef.parse(JSON.parse(fs.readFileSync(path.join(dir, "nodes", file), "utf8")));
+    let def;
+    try { def = NodeDef.parse(JSON.parse(fs.readFileSync(path.join(dir, "nodes", file), "utf8"))); } catch (e) { throw new Error(`nodes/${file}: ${e.message}`); }
     const template = def.as2Template ? path.join(dir, def.as2Template) : undefined;
     const text = template && fs.existsSync(template) ? fs.readFileSync(template, "utf8").replace(/\r\n/g, "\n") : undefined;
     return { file, def, id: `${manifest.id}/${def.kind}@${def.major}`, template, text };
@@ -63,7 +64,7 @@ export function render(def, text, fields = fixtureFields(def)) {
 }
 
 /** Static checks that a template agrees with its definition. Returns a list of problems. */
-export function checkTemplate(def, text) {
+export function checkTemplate(def, text, packId = "core") {
   const errs = [];
   const fields = fixtureFields(def);
   const ph = placeholders(text);
@@ -71,7 +72,7 @@ export function checkTemplate(def, text) {
   const dyn = dynOut(def, fields).map((p) => p.name);
   const count = (k, n) => ph.filter((p) => p.kind === k && p.name === n).length;
   const first = text.split("\n")[0];
-  if (first !== `// [{{node.id}}] core/${def.kind}@${def.major}`) errs.push("first line must be the header '// [{{node.id}}] core/<Kind>@<major>'");
+  if (first !== `// [{{node.id}}] ${packId}/${def.kind}@${def.major}`) errs.push(`first line must be the header '// [{{node.id}}] ${packId}/<Kind>@<major>'`);
   for (const p of ph) {
     const bad = (m) => errs.push(`{{${p.kind}${p.name ? "." + p.name : ""}}}: ${m}`);
     if (p.kind === "in" && !pins(def.inputs, false).includes(p.name)) bad("no such data input");
