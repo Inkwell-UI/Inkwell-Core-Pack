@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.5.5 (141 nodes, 138 with a template)
+## 0.5.5 (143 nodes, 140 with a template)
+
+**Scroll To** and **Get Scroll Position** (Components, `core/ScrollTo@1`, `core/GetScroll@1`): move or read the scroll offset of a frame that scrolls in Figma (Prototype > Overflow behaviour). Scroll To takes `x` and `y` in design px from the start (kept between 0 and the end of the content, only on the axes the frame scrolls); Get Scroll Position gives `x`, `y` and the largest offsets `maxX`, `maxY`. On a layer that does not scroll they do nothing and read 0. Needs an editor that compiles scrolling frames (Spec: IR `overflow`).
 
 **For** (Flow, `core/For@1`): runs `body` once for every index from `first` to `last` (both included, default 0 to 9 = ten runs), with the index as an output, then `completed`. At most 10000 runs. The body is a function per iteration like For Each, so a Delay inside the body keeps its own index.
 

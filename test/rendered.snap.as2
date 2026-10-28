@@ -273,6 +273,16 @@ var n1_y = Number(IN_target._y) || 0;
 // [n1] core/GetProp@1
 __g.props[""]
 
+===== core/GetScroll@1
+// [n1] core/GetScroll@1
+var n1_t = IN_target;
+var n1_s = n1_t.getScroll != undefined ? n1_t.getScroll() : {x: 0, y: 0, maxX: 0, maxY: 0};
+var n1_x = n1_s.x;
+var n1_y = n1_s.y;
+var n1_maxX = n1_s.maxX;
+var n1_maxY = n1_s.maxY;
+/* next:then */
+
 ===== core/GetSelected@1
 // [n1] core/GetSelected@1
 var n1_index = Number(IN_target.getSelectedIndex());
@@ -692,6 +702,12 @@ __g.stackRemove(n1_i._parent, n1_i);
 ===== core/Round@1 (pure)
 // [n1] core/Round@1
 (Math.round(IN_value) || 0)
+
+===== core/ScrollTo@1
+// [n1] core/ScrollTo@1
+var n1_t = IN_target;
+if (n1_t.scrollTo != undefined) n1_t.scrollTo(IN_x, IN_y);
+/* next:then */
 
 ===== core/Select@1 (pure)
 // [n1] core/Select@1
