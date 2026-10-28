@@ -2,7 +2,7 @@
 
 ## 0.5.3 (133 nodes, 130 with a template)
 
-The 15 Inventory nodes name their contract in the top-level node field **`contract`** (`"InventoryMenu"`, Spec `NodeDef.contract`, frozen with Spec v1) instead of `extra.contract`. Nothing else changes. Editors older than this pack read only `extra.contract` and then no longer restrict these nodes to a menu replacement; this editor reads both.
+The 15 Inventory nodes name their contract in the top-level node field **`contract`** (`"InventoryMenu"`, Spec `NodeDef.contract`, frozen with Spec v1) instead of `extra.contract`. `compatible.tool` is now `^0.5.0` (the editor evaluates it: 0.5.x). Nothing else changes. Editors older than this pack read only `extra.contract` and then no longer restrict these nodes to a menu replacement; this editor reads both.
 
 ## 0.5.2 (133 nodes, 130 with a template)
 
