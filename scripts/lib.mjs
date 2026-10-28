@@ -85,6 +85,8 @@ export function render(def, text, fields = fixtureFields(def)) {
       case "params": return dynOut(def, fields).map((p) => `${uid}_${p.name}:${AS2_TYPE[p.type]}`).join(", ");
       case "args": return [...dynIn(def, fields), ...sigIn(def)].map((p) => `IN_${p.name}`).join(", ");
       case "fn": return `mods.Test.Fn_${fields[name]}`;
+      case "comp": return `mods.Test.Comp_${fields[name]}`;
+      case "symbol": return `"inkwell_component_${fields[name]}"`;
       case "exit": return (FIXTURE_SIGNATURE.exits.find((x) => x.id === fields[name]) ?? FIXTURE_SIGNATURE.exits[0]).name;
       default: throw new Error(`unknown placeholder {{${k}${name ? "." + name : ""}}}`);
     }
@@ -112,7 +114,8 @@ export function checkTemplate(def, text, packId = "core") {
     else if (p.kind === "fn" && (def.extra?.callsFunction !== p.name || !(p.name in def.fields))) bad("needs extra.callsFunction naming this field");
     else if (p.kind === "exit" && (!def.extra?.signatureInputs || !(p.name in def.fields))) bad("needs extra.signatureInputs and the field");
     else if (p.kind === "exits" && !def.extra?.dynamicExits) bad("needs extra.dynamicExits");
-    else if (!["node", "in", "out", "next", "guarded", "field", "raw", "var", "params", "args", "fn", "exit", "exits"].includes(p.kind)) bad("unknown placeholder kind");
+    else if ((p.kind === "comp" || p.kind === "symbol") && (def.extra?.createsComponent !== p.name || !(p.name in def.fields))) bad("needs extra.createsComponent naming this field");
+    else if (!["node", "in", "out", "next", "guarded", "field", "raw", "var", "params", "args", "fn", "exit", "exits", "comp", "symbol"].includes(p.kind)) bad("unknown placeholder kind");
   }
   if (def.extra?.dynamicExits) {
     if (ph.filter((p) => p.kind === "exits").length !== 1) errs.push("{{exits}} must be placed exactly once");

@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.5.5 (138 nodes, 135 with a template)
+## 0.5.5 (140 nodes, 137 with a template)
+
+**Create Component** and **Remove Component** (Components, `core/CreateComponent@1`, `core/RemoveComponent@1`): add and remove a component instance under a layer at runtime. Create Component has a `component` field, a `parent` layer, a `name`, a `props` Object and the new clip as `instance`; new template placeholders `{{comp.x}}` and `{{symbol.x}}`. Needs an editor with component support; older editors show the nodes as unknown pack nodes.
 
 **Get Prop** (Variables, `core/GetProp@1`, pure): reads a prop of the component the graph belongs to. Field `prop` holds the prop id, the `value` pin takes the prop's type from the field `propType`, a copy the editor keeps up to date (`typeFrom: "propType"`), the template is `__g.props["<id>"]`. Only valid in a component graph (Spec `scope: "blueprint"`, `Graph.props`); an editor older than this treats it as an unknown pack node.
 

@@ -130,6 +130,15 @@ else if ("increment" == "reset") __g.ctr["counter"] = 0;
 var n1_value = Number(__g.ctr["counter"]) || 0;
 /* next:then */
 
+===== core/CreateComponent@1
+// [n1] core/CreateComponent@1
+var n1_p = IN_parent;
+var n1_n = IN_name;
+if (n1_n == "") n1_n = "component" + n1_p.getNextHighestDepth();
+var n1_instance = n1_p.attachMovie("inkwell_component_", n1_n, n1_p.getNextHighestDepth());
+(new mods.Test.Comp_(n1_instance, IN_props, __g)).init();
+/* next:then */
+
 ===== core/DegreesToRadians@1 (pure)
 // [n1] core/DegreesToRadians@1
 (isFinite((IN_value * Math.PI / 180)) ? ((IN_value * Math.PI / 180)) : 0)
@@ -654,6 +663,11 @@ IN_target.gotoAndStop(1 + Math.round(Math.min(Math.max(IN_value, 0), 1) * (100 -
 ===== core/Refresh@1
 // [n1] core/Refresh@1
 IN_target.refresh();
+/* next:then */
+
+===== core/RemoveComponent@1
+// [n1] core/RemoveComponent@1
+IN_instance.removeMovieClip();
 /* next:then */
 
 ===== core/Replace@1 (pure)

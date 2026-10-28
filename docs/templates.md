@@ -26,6 +26,8 @@ Syntax `{{kind.name}}` (or `{{params}}`). Never write two `{` in a row anywhere 
 | `{{params}}` | On Widget Call only: the typed parameter list built from `fields.params` |
 | `{{args}}` | Call Widget and the function nodes: the data inputs built from `fields.params` (`extra.dynamicInputs`) or, for Function Exit, from the signature outputs (`extra.signatureInputs`), in order, as a comma-separated argument list; an unconnected input holds its type's default |
 | `{{fn.<field>}}` | Call Function only: the full AS2 class name of the function graph whose id is in that field (`extra.callsFunction` names the field) |
+| `{{comp.<field>}}` | Create Component only: the full AS2 class name of the component graph whose Figma component id is in that field (`extra.createsComponent` names the field) |
+| `{{symbol.<field>}}` | Create Component only: the linkage name of that component's library symbol, as an AS2 string (what `attachMovie` takes) |
 | `{{exit.<field>}}` | Function Exit only: the name of the signature exit whose id is in that field, as an AS2 identifier |
 | `{{exits}}` | Call Function only, alone on its line: one `<exit name>: function(<outputs as typed params>) { try { ... } catch ... }` per entry of `fields.exits` (`extra.dynamicExits`), comma-separated; each body is the guarded continuation of that exit |
 
@@ -103,6 +105,8 @@ Nodes with the node field `contract: "<Menu>"` (before pack 0.5.3: `extra.contra
 ## Component props (0.5.5)
 
 A component graph (Spec `scope: "blueprint"`) has `props` (`{id, name, type, default}`). **Get Prop** (`extra.readsProp: "prop"`, `typeFrom: "prop"`) is a pure node whose `value` pin takes the type in the field `propType` (a copy of the type of the prop whose id is in `prop`; the editor keeps it up to date, like Call Function's signature copy); the template reads it as `__g.props[{{field.prop}}]`. The object `__g.props` is filled when the component instance is created (not generated yet: component codegen is not built).
+
+Create Component and Remove Component (category Components) add a component instance under a layer at runtime and remove it. Create Component makes the instance with `attachMovie({{symbol.component}}, name, depth)` on the parent layer, then `(new {{comp.component}}(clip, props, __g)).init()`: the component's graph gets its own object per instance, `props` (an Object keyed by prop id; build it with Make Object) and the creating graph as `owner`; its On Load runs in `init()`. The `instance` output is the new clip. A runtime instance is drawn above everything Figma placed in the parent (depths from `getNextHighestDepth()`).
 
 ## Functions (0.5.5)
 
