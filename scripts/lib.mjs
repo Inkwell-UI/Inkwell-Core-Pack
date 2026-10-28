@@ -21,7 +21,7 @@ export function loadPack(dir = root) {
 }
 
 const PH = /\{\{(\w+)(?:\.(\w+))?\}\}/g;
-const AS2_TYPE = { String: "String", Number: "Number", Bool: "Boolean" };
+const AS2_TYPE = { String: "String", Number: "Number", Bool: "Boolean", Array: "Array", Object: "Object" };
 
 export const placeholders = (text) => [...text.matchAll(PH)].map((m) => ({ kind: m[1], name: m[2] }));
 
@@ -31,10 +31,22 @@ const dynOut = (def, fields) => (def.extra?.dynamicOutputs ? fields[def.extra.dy
 /** Dynamic input pins (Call Widget args) come from the field named by def.extra.dynamicInputs. */
 const dynIn = (def, fields) => (def.extra?.dynamicInputs ? fields[def.extra.dynamicInputs] ?? [] : []);
 
+/** A function signature for fixtures: Function Entry / Exit take their pins from the graph's signature, not from a field. */
+export const FIXTURE_SIGNATURE = {
+  inputs: [{ id: "i1", name: "title", type: "String" }],
+  outputs: [{ id: "o1", name: "count", type: "Number" }],
+  exits: [{ id: "x1", name: "Done" }, { id: "x2", name: "Failed" }],
+};
+
+/** Data inputs of Function Exit come from the signature list named by def.extra.signatureInputs. */
+const sigIn = (def) => (def.extra?.signatureInputs ? FIXTURE_SIGNATURE[def.extra.signatureInputs] ?? [] : []);
+
 export function fixtureFields(def) {
   const f = {};
   for (const [k, s] of Object.entries(def.fields)) f[k] = s.default ?? s.enum?.[0] ?? (s.type === "number" || s.type === "integer" ? 0 : s.type === "boolean" ? false : "");
   if (def.kind === "OnWidgetCall" || def.kind === "CallWidget") f.params = [{ name: "title", type: "String" }, { name: "hold", type: "Number" }];
+  if (def.kind === "CallFunction") Object.assign(f, { function: "Greet", ...structuredClone(FIXTURE_SIGNATURE) });
+  if (def.kind === "FunctionExit") f.exit = "x1";
   return f;
 }
 
@@ -42,6 +54,20 @@ export function fixtureFields(def) {
 export function render(def, text, fields = fixtureFields(def)) {
   const uid = "n1";
   const body = text.split("\n").map((line) => {
+    const exitsLine = line.match(/^(\s*)\{\{exits\}\}\s*$/);
+    if (exitsLine) {
+      const ind = exitsLine[1];
+      const outs = dynOut(def, fields).map((p) => `${uid}_${p.name}:${AS2_TYPE[p.type]}`).join(", ");
+      return (fields[def.extra.dynamicExits] ?? []).map((x) => [
+        `${ind}${x.name}: function(${outs}) {`,
+        `${ind}    try {`,
+        `${ind}        /* next:${x.name} */`,
+        `${ind}    } catch (e) {`,
+        `${ind}        __g.fail("n0", e);`,
+        `${ind}    }`,
+        `${ind}}`
+      ].join("\n")).join(",\n");
+    }
     const own = line.match(/^(\s*)\{\{(next|guarded)\.(\w+)\}\}\s*$/);
     if (!own) return line;
     const [, ind, k, name] = own;
@@ -57,7 +83,9 @@ export function render(def, text, fields = fixtureFields(def)) {
       case "raw": return String(fields[name]);
       case "var": return `__g.v_${fields[name] || "x"}`;
       case "params": return dynOut(def, fields).map((p) => `${uid}_${p.name}:${AS2_TYPE[p.type]}`).join(", ");
-      case "args": return dynIn(def, fields).map((p) => `IN_${p.name}`).join(", ");
+      case "args": return [...dynIn(def, fields), ...sigIn(def)].map((p) => `IN_${p.name}`).join(", ");
+      case "fn": return `mods.Test.Fn_${fields[name]}`;
+      case "exit": return (FIXTURE_SIGNATURE.exits.find((x) => x.id === fields[name]) ?? FIXTURE_SIGNATURE.exits[0]).name;
       default: throw new Error(`unknown placeholder {{${k}${name ? "." + name : ""}}}`);
     }
   });
@@ -80,8 +108,15 @@ export function checkTemplate(def, text, packId = "core") {
     else if ((p.kind === "next" || p.kind === "guarded") && !pins(def.outputs, true).includes(p.name)) bad("no such exec output");
     else if (["field", "raw", "var"].includes(p.kind) && !(p.name in def.fields)) bad("no such field");
     else if (p.kind === "params" && !def.extra?.dynamicOutputs) bad("needs extra.dynamicOutputs");
-    else if (p.kind === "args" && !def.extra?.dynamicInputs) bad("needs extra.dynamicInputs");
-    else if (!["node", "in", "out", "next", "guarded", "field", "raw", "var", "params", "args"].includes(p.kind)) bad("unknown placeholder kind");
+    else if (p.kind === "args" && !def.extra?.dynamicInputs && !def.extra?.signatureInputs) bad("needs extra.dynamicInputs or extra.signatureInputs");
+    else if (p.kind === "fn" && (def.extra?.callsFunction !== p.name || !(p.name in def.fields))) bad("needs extra.callsFunction naming this field");
+    else if (p.kind === "exit" && (!def.extra?.signatureInputs || !(p.name in def.fields))) bad("needs extra.signatureInputs and the field");
+    else if (p.kind === "exits" && !def.extra?.dynamicExits) bad("needs extra.dynamicExits");
+    else if (!["node", "in", "out", "next", "guarded", "field", "raw", "var", "params", "args", "fn", "exit", "exits"].includes(p.kind)) bad("unknown placeholder kind");
+  }
+  if (def.extra?.dynamicExits) {
+    if (ph.filter((p) => p.kind === "exits").length !== 1) errs.push("{{exits}} must be placed exactly once");
+    if (!text.split("\n").some((l) => /^\s*\{\{exits\}\}\s*$/.test(l))) errs.push("{{exits}} must be alone on its line");
   }
   for (const n of pins(def.inputs, false)) if (!count("in", n)) errs.push(`data input '${n}' is never used`);
   for (const n of pins(def.outputs, true)) if (count("next", n) + count("guarded", n) !== 1) errs.push(`exec output '${n}' must be placed exactly once`);

@@ -24,7 +24,10 @@ Syntax `{{kind.name}}` (or `{{params}}`). Never write two `{` in a row anywhere 
 | `{{next.<execOut>}}` | the statements that follow exec output `<execOut>` |
 | `{{guarded.<execOut>}}` | the same statements wrapped in `try { ... } catch (e) { __g.fail("<entry node id>", e); }` |
 | `{{params}}` | On Widget Call only: the typed parameter list built from `fields.params` |
-| `{{args}}` | Call Widget only: the data inputs built from `fields.params` (`extra.dynamicInputs`), in order, as a comma-separated argument list; an unconnected input holds its type's default |
+| `{{args}}` | Call Widget and the function nodes: the data inputs built from `fields.params` (`extra.dynamicInputs`) or, for Function Exit, from the signature outputs (`extra.signatureInputs`), in order, as a comma-separated argument list; an unconnected input holds its type's default |
+| `{{fn.<field>}}` | Call Function only: the full AS2 class name of the function graph whose id is in that field (`extra.callsFunction` names the field) |
+| `{{exit.<field>}}` | Function Exit only: the name of the signature exit whose id is in that field, as an AS2 identifier |
+| `{{exits}}` | Call Function only, alone on its line: one `<exit name>: function(<outputs as typed params>) { try { ... } catch ... }` per entry of `fields.exits` (`extra.dynamicExits`), comma-separated; each body is the guarded continuation of that exit |
 
 Rules:
 - Every exec output pin appears exactly once, as `next` or `guarded`, on its own line. Codegen re-indents the multi-line substitution to that line's indentation. An exec output with no wire renders as nothing.
@@ -96,3 +99,10 @@ Nodes with the node field `contract: "<Menu>"` (before pack 0.5.3: `extra.contra
 - **Glue.** The editor generates the replacement glue from the contract files (Editor `src/main/codegen/replacementGlue.ts`) and puts it at `_root.inkwellContract` before any graph starts. Templates use only its three members: `on(callbackName, fn)` registers `fn` for an engine callback (`fn` gets the callback's arguments; several handlers per name are fine), `send(callName, args:Array, respondTo?)` makes an engine call in the `gfx.io.GameDelegate` wire format (`ExternalInterface.call(name, uid, ...args)`), and the engine's `respond(uid, ...)` answer runs the handlers registered for `respondTo`; `select(index)` sets the item list's `selectedIndex` when `index >= 0` (the engine acts on it). `list` is the object `_root.GetInventoryItemList()` returns.
 - **Events** are `extra.entry: true` with `extra.contractCallback` (the engine callback name) for readers; the continuation is `guarded`. Request Item Card answers through On Item Card (the `UpdateItemCardInfo` handlers), whether the card comes as the respond answer (seen in S-B) or as the callback.
 - **Names** start with the menu (`Inventory: Play Sound`, kind `InventoryPlaySound`) so they never clash with the runtime nodes Play Sound and Close Menu, which go through the Inkwell bridge a replacement does not have.
+
+## Functions (0.5.5)
+
+A function is a graph of its own (Spec `scope: "function"`, `Graph.signature`), compiled to its own class. **Every call creates a new instance**: `new <FnClass>(__g.base, __g, exits).run(args)`, so timers (`__g.dl`), counters and local variables of two calls never meet. `exits` is an object with one closure per exit; Function Exit calls one of them with the output values, now or later (after a Delay, the exit fires when the body finishes). Inside the function `__g` is the instance, `__g.base` the caller's base clip, `__g.exits` the exits object. A function cannot read or write the caller's graph variables: state goes in as parameters and out as outputs; its own variables are locals of one call.
+- **Function Entry** (`extra.entry`, `extra.functionEntry`, `extra.signatureOutputs: "inputs"`): one per function graph; codegen emits the continuation inside `run(<inputs>)`. Its data outputs are the signature inputs, named `<uid>_<input name>`.
+- **Function Exit** (`extra.signatureInputs: "outputs"`): `__g.exits.<exit>(<outputs>)`. Field `exit` is the exit id. Outputs not wired hold their type's default.
+- **Call Function** (`extra.callsFunction`, `dynamicInputs`, `dynamicOutputs`, `dynamicExits`): the signature copy in `inputs`, `outputs`, `exits` fields gives the pins; the data outputs are the parameters of every exit closure, so downstream nodes read them as `<uid>_<output name>`. Pin and exit names must be AS2 identifiers.
