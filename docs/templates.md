@@ -100,6 +100,10 @@ Nodes with the node field `contract: "<Menu>"` (before pack 0.5.3: `extra.contra
 - **Events** are `extra.entry: true` with `extra.contractCallback` (the engine callback name) for readers; the continuation is `guarded`. Request Item Card answers through On Item Card (the `UpdateItemCardInfo` handlers), whether the card comes as the respond answer (seen in S-B) or as the callback.
 - **Names** start with the menu (`Inventory: Play Sound`, kind `InventoryPlaySound`) so they never clash with the runtime nodes Play Sound and Close Menu, which go through the Inkwell bridge a replacement does not have.
 
+## Component props (0.5.5)
+
+A component graph (Spec `scope: "blueprint"`) has `props` (`{id, name, type, default}`). **Get Prop** (`extra.readsProp: "prop"`, `typeFrom: "prop"`) is a pure node whose `value` pin takes the type in the field `propType` (a copy of the type of the prop whose id is in `prop`; the editor keeps it up to date, like Call Function's signature copy); the template reads it as `__g.props[{{field.prop}}]`. The object `__g.props` is filled when the component instance is created (not generated yet: component codegen is not built).
+
 ## Functions (0.5.5)
 
 A function is a graph of its own (Spec `scope: "function"`, `Graph.signature`), compiled to its own class. **Every call creates a new instance**: `new <FnClass>(__g.base, __g, exits).run(args)`, so timers (`__g.dl`), counters and local variables of two calls never meet. `exits` is an object with one closure per exit; Function Exit calls one of them with the output values, now or later (after a Delay, the exit fires when the body finishes). Inside the function `__g` is the instance, `__g.base` the caller's base clip, `__g.exits` the exits object. A function cannot read or write the caller's graph variables: state goes in as parameters and out as outputs; its own variables are locals of one call.

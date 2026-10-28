@@ -246,6 +246,10 @@ var n1_x = Number(IN_target._x) || 0;
 var n1_y = Number(IN_target._y) || 0;
 /* next:then */
 
+===== core/GetProp@1 (pure)
+// [n1] core/GetProp@1
+__g.props[""]
+
 ===== core/GetSelected@1
 // [n1] core/GetSelected@1
 var n1_index = Number(IN_target.getSelectedIndex());

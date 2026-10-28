@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.5.5 (137 nodes, 134 with a template)
+## 0.5.5 (138 nodes, 135 with a template)
+
+**Get Prop** (Variables, `core/GetProp@1`, pure): reads a prop of the component the graph belongs to. Field `prop` holds the prop id, the `value` pin takes the prop's type from the field `propType`, a copy the editor keeps up to date (`typeFrom: "propType"`), the template is `__g.props["<id>"]`. Only valid in a component graph (Spec `scope: "blueprint"`, `Graph.props`); an editor older than this treats it as an unknown pack node.
 
 Functions (category Functions): **Function Entry** (`core/FunctionEntry@1`), **Function Exit** (`core/FunctionExit@1`) and **Call Function** (`core/CallFunction@1`). A function is its own graph file (Spec: `scope: "function"` with a `signature`, no version bump). Entry and Exit take their pins from the graph's own signature (Entry: the inputs as data outputs; Exit: the outputs as data inputs, plus the `exit` field holding an exit id). Call Function keeps a copy of the signature in its fields (`function`, `inputs`, `outputs`, `exits`) and the editor keeps that copy up to date; it has one exec output per exit and one data output per signature output. New template placeholders `{{exits}}`, `{{fn.<field>}}`, `{{exit.<field>}}` and a wider `{{args}}`: `docs/templates.md`, Functions. Needs an editor that knows functions; older editors show the three nodes as unknown pack nodes and keep their data.
 
