@@ -262,6 +262,17 @@ _root.inkwellContract.select(IN_index);
 _root.inkwellContract.send("ItemSelect", IN_slot >= 0 ? [IN_slot] : []);
 /* next:then */
 
+===== core/InventoryOnAttemptEquip@1
+// [n1] core/InventoryOnAttemptEquip@1
+_root.inkwellContract.on("AttemptEquip", function() {
+    var n1_slot = typeof (arguments[0]) == "number" ? arguments[0] : 0;
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+});
+
 ===== core/InventoryOnDropItem@1
 // [n1] core/InventoryOnDropItem@1
 _root.inkwellContract.on("DropItem", function() {
@@ -289,6 +300,16 @@ _root.inkwellContract.on("InvalidateListData", function() {
 // [n1] core/InventoryOnItemCard@1
 _root.inkwellContract.on("UpdateItemCardInfo", function() {
     var n1_info = typeof (arguments[0]) == "object" ? arguments[0] : {};
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+});
+
+===== core/InventoryOnKey@1
+// [n1] core/InventoryOnKey@1
+_root.inkwellContract.on("key:" + "Enter", function() {
     try {
         /* next:then */
     } catch (e) {
@@ -345,6 +366,11 @@ _root.inkwellContract.send("RequestItemCardInfo", [], "UpdateItemCardInfo");
 ===== core/InventorySaveIndices@1
 // [n1] core/InventorySaveIndices@1
 _root.inkwellContract.send("SaveIndices", [IN_indices instanceof Array ? IN_indices : []]);
+/* next:then */
+
+===== core/InventoryUpdateItem3D@1
+// [n1] core/InventoryUpdateItem3D@1
+_root.inkwellContract.send("UpdateItem3D", [IN_show]);
 /* next:then */
 
 ===== core/Join@1 (pure)
