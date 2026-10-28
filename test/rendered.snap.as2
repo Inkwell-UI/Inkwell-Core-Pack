@@ -611,6 +611,11 @@ IN_target.gotoAndStop(1 + Math.round(Math.min(Math.max(IN_value, 0), 1) * (100 -
 // [n1] core/Random@1
 ({ f: function(a, b, i) { return i ? a + Math.floor(Math.random() * (b - a + 1)) : a + Math.random() * (b - a); } }).f(IN_min, IN_max, IN_integer)
 
+===== core/RawAS2@1
+// [n1] core/RawAS2@1
+
+/* next:then */
+
 ===== core/Refresh@1
 // [n1] core/Refresh@1
 IN_target.refresh();
