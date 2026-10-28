@@ -204,6 +204,19 @@ __g.t_n1 = setInterval(function() {
 Selection.setFocus(IN_target);
 /* next:then */
 
+===== core/For@1
+// [n1] core/For@1
+var n1_body = function(n1_index) {
+    /* next:body */
+};
+var n1_first = IN_first;
+var n1_last = IN_last;
+if (n1_last - n1_first > 10000) n1_last = n1_first + 10000;
+for (var n1_i = n1_first; n1_i <= n1_last; n1_i++) {
+    n1_body(n1_i);
+}
+/* next:completed */
+
 ===== core/ForEach@1
 // [n1] core/ForEach@1
 var n1_arr = IN_array;

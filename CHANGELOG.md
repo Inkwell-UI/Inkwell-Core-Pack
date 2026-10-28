@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.5.5 (140 nodes, 137 with a template)
+## 0.5.5 (141 nodes, 138 with a template)
+
+**For** (Flow, `core/For@1`): runs `body` once for every index from `first` to `last` (both included, default 0 to 9 = ten runs), with the index as an output, then `completed`. At most 10000 runs. The body is a function per iteration like For Each, so a Delay inside the body keeps its own index.
 
 **Create Component** and **Remove Component** (Components, `core/CreateComponent@1`, `core/RemoveComponent@1`): add and remove a component instance under a layer at runtime. Create Component has a `component` field, a `parent` layer, a `name`, a `props` Object and the new clip as `instance`; new template placeholders `{{comp.x}}` and `{{symbol.x}}`. Needs an editor with component support; older editors show the nodes as unknown pack nodes.
 
