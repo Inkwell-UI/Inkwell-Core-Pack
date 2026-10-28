@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+**Get Localized Text** (Components, `core/GetLocalizedText@1`, pure): the translation of a `$KEY` (`key` pin) in the player's language, like Set Text does for a `$KEY`. In a widget (no runtime translator) it gives the key itself. An unwired `$KEY` is a row of the Localization table.
+
 **Tween** (`core/Tween@1`): new `property` values `localX`, `localY` and `localRotation`. `from` and `to` are offsets added to the target's `_x`, `_y` or `_rotation` as it is when the tween starts (so 0 to 100 moves the clip 100 px from where it is). Existing values are unchanged.
 
 ## 0.5.5 (143 nodes, 140 with a template)

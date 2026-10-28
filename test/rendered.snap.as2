@@ -263,6 +263,10 @@ var n1_device = __g.bridge.getInputDevice() == "gamepad" ? "gamepad" : "keyboard
 var n1_gamepad = n1_device == "gamepad";
 /* next:then */
 
+===== core/GetLocalizedText@1 (pure)
+// [n1] core/GetLocalizedText@1
+__g.tr(IN_key)
+
 ===== core/GetPosition@1
 // [n1] core/GetPosition@1
 var n1_x = Number(IN_target._x) || 0;
