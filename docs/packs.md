@@ -18,6 +18,7 @@ The id `core` is taken by the bundled core pack. Ask in the Packs Index before y
 ```
 manifest.json            id, version, compatible.tool, dependencies
 nodes/<Kind>.json        one node definition per file; the file name is the kind
+functions/<id>.json      optional: function graphs (scope "function") other graphs call as <packId>/<id>; the editor's Library > Export writes these
 templates/<Kind>.as2     one AS2 template per node (editor-only nodes have none)
 CHANGELOG.md             shown to users before they install or update
 test/*.test.mjs          your tests (not shipped)
