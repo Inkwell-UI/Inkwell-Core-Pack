@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.3 (133 nodes, 130 with a template)
+
+The 15 Inventory nodes name their contract in the top-level node field **`contract`** (`"InventoryMenu"`, Spec `NodeDef.contract`, frozen with Spec v1) instead of `extra.contract`. Nothing else changes. Editors older than this pack read only `extra.contract` and then no longer restrict these nodes to a menu replacement; this editor reads both.
+
 ## 0.5.2 (133 nodes, 130 with a template)
 
 More Inventory contract nodes (Phase 5): Inventory: On Key (`name` field (the key; the handler name the graph checks for duplicates): Up, Down, Left, Right, Enter, Tab, Escape or a letter; fed by the Key listener of the generated replacement glue; keyboard only), Inventory: On Attempt Equip (engine callback `AttemptEquip`, output `slot`) and Inventory: Update Item 3D (`show`).
