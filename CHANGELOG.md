@@ -2,7 +2,7 @@
 
 ## 0.5.2 (133 nodes, 130 with a template)
 
-More Inventory contract nodes (Phase 5): Inventory: On Key (`key` field: Up, Down, Left, Right, Enter, Tab, Escape or a letter; fed by the Key listener of the generated replacement glue; keyboard only), Inventory: On Attempt Equip (engine callback `AttemptEquip`, output `slot`) and Inventory: Update Item 3D (`show`).
+More Inventory contract nodes (Phase 5): Inventory: On Key (`name` field (the key; the handler name the graph checks for duplicates): Up, Down, Left, Right, Enter, Tab, Escape or a letter; fed by the Key listener of the generated replacement glue; keyboard only), Inventory: On Attempt Equip (engine callback `AttemptEquip`, output `slot`) and Inventory: Update Item 3D (`show`).
 
 ## 0.5.1 (130 nodes, 127 with a template)
 
