@@ -136,7 +136,7 @@ var n1_p = IN_parent;
 var n1_n = IN_name;
 if (n1_n == "") n1_n = "component" + n1_p.getNextHighestDepth();
 var n1_instance = n1_p.attachMovie("inkwell_component_", n1_n, n1_p.getNextHighestDepth());
-__g.stackAdd(n1_p, n1_instance);
+__g.stackAdd(n1_p, n1_instance, "");
 (new mods.Test.Comp_(n1_instance, IN_props, __g)).init();
 /* next:then */
 
@@ -682,9 +682,7 @@ IN_target.refresh();
 ===== core/RemoveComponent@1
 // [n1] core/RemoveComponent@1
 var n1_i = IN_instance;
-var n1_p = n1_i._parent;
-n1_i.removeMovieClip();
-__g.restack(n1_p);
+__g.stackRemove(n1_i._parent, n1_i);
 /* next:then */
 
 ===== core/Replace@1 (pure)
