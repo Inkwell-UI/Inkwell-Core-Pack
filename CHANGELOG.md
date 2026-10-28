@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.5 (137 nodes, 134 with a template)
+
+Functions (category Functions): **Function Entry** (`core/FunctionEntry@1`), **Function Exit** (`core/FunctionExit@1`) and **Call Function** (`core/CallFunction@1`). A function is its own graph file (Spec: `scope: "function"` with a `signature`, no version bump). Entry and Exit take their pins from the graph's own signature (Entry: the inputs as data outputs; Exit: the outputs as data inputs, plus the `exit` field holding an exit id). Call Function keeps a copy of the signature in its fields (`function`, `inputs`, `outputs`, `exits`) and the editor keeps that copy up to date; it has one exec output per exit and one data output per signature output. New template placeholders `{{exits}}`, `{{fn.<field>}}`, `{{exit.<field>}}` and a wider `{{args}}`: `docs/templates.md`, Functions. Needs an editor that knows functions; older editors show the three nodes as unknown pack nodes and keep their data.
+
 ## 0.5.4 (134 nodes, 131 with a template)
 
 Raw AS2 (Debug, `core/RawAS2@1`): exec in, `then` out, one multi-line `code` field written into the graph class verbatim (`{{raw.code}}`; the field pattern accepts any text). It is the home for hand-written ActionScript that has no node of its own (the AS2 importer puts unmatched statements here); the code runs inside the event handler's `try/catch`, so a throw is logged with the entry node id. A syntax error fails the build.
