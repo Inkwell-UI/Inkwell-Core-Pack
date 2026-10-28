@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+**Tween** (`core/Tween@1`): new `property` values `localX`, `localY` and `localRotation`. `from` and `to` are offsets added to the target's `_x`, `_y` or `_rotation` as it is when the tween starts (so 0 to 100 moves the clip 100 px from where it is). Existing values are unchanged.
+
 ## 0.5.5 (143 nodes, 140 with a template)
 
 **On Timer** (`core/OnTimer@1`): clears its previous timer before arming, so running the graph start twice no longer stacks timers that each fire the handler. A tick that arrives before half the period has passed by `getTimer()` is ignored, so a runtime whose setInterval fires early or in bursts cannot run the handler many times in a row.
