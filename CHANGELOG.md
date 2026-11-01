@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+**Inspector text** (new definition key `extra.inspector`, optional; pins, fields and templates are unchanged): `description` (one line under the node's name), `labels` (field or unwired pin name to the label shown), `options` (field name to option value to the label shown). Only the Inspector uses them, never the canvas node; a field without a label shows its name as words (`valueType` becomes "Value type"). Compare has the first set: "Compare as", "Operator", "First value", "Second value" and "is equal to (==)" style option names.
+
+**Breaking: the math and Inventory nodes left core** (148 nodes become 108). The 25 math nodes (Abs, Acos, Asin, Atan, Atan2, Ceil, Clamp, Cos, Degrees To Radians, Exp, Floor, Lerp, Ln, Log Base, Max, Min, Modulo, Power, Radians To Degrees, Random, Round, Sign, Sin, Sqrt, Tan) are now `mathutils/<Kind>@1` (`Inkwell-UI/Inkwell-MathUtils-Pack`, 0.1.0, which also adds 12 new ones) and the 15 `Inventory:` contract nodes are now `inventory/<Kind>@1` (`Inkwell-UI/Inkwell-Inventory-Pack`, 0.1.0). Pins, fields and templates are unchanged: a graph that used `core/Clamp@1` works again after its nodes are renamed to `mathutils/Clamp@1` (add the pack, then rename the kind in the graph file). Until then the nodes show as Unknown Pack Node (Data Preserved). Add, Subtract, Multiply, Divide, Arithmetic and Compare stay in core.
+
+**Clear Child Components** (Components, `core/ClearChildComponents@1`): removes every instance Create Component added under the `parent` layer, then re-lays out the (now empty) auto-layout parent. Figma-designed children stay. Needs the editor that emits `stackMethods` for this node.
+
+**To String** (`core/ToString@1`): an Object or Array gives its contents instead of `[object Object]`, like `{name: "Bob", tags: [1, 2]}` (strings inside are quoted, nesting stops at depth 7 with `...`; a plain string at the top level stays unquoted). The key order is the runtime's for-in order. Other types are unchanged.
+
+**Make Object** (`core/MakeObject@1`): new field `pairs` (1 to 16, default 4, so existing nodes and wires are unchanged) sets how many key/value pairs it has; the pins `key0`, `value0`, `key1`... follow. The pins come from the new definition key `extra.repeatInputs` (`{count: "<field>", pins: [...]}`, `docs/templates.md`); the template builds the object from `arguments`. An editor older than this shows only the field.
+
+**To String** (`core/ToString@1`): new field `valueType` (default `Number`, so existing graphs are unchanged); the `value` input takes that type (`typeFrom`), so an Object item of For Each or Array Get (a line of text, say) can be wired in. The template is unchanged.
+
+**Parse Int** (Logic, `core/ParseInt@1`, pure): `parseInt(text, radix)`; `radix` defaults to 10. It reads the leading digits and ignores the rest (`"12px"` gives 12, where To Number gives 0), and gives 0 when there are none.
+
+**On Hover** and **On Hover End** (Events, `core/OnHover@1`, `core/OnHoverEnd@1`, `requiresRuntime`): fire when the mouse enters or leaves the target (`onRollOver` / `onRollOut`), independent of focus.
+
 **Get Localized Text** (Components, `core/GetLocalizedText@1`, pure): the translation of a `$KEY` (`key` pin) in the player's language, like Set Text does for a `$KEY`. In a widget (no runtime translator) it gives the key itself. An unwired `$KEY` is a row of the Localization table.
 
 **Tween** (`core/Tween@1`): new `property` values `localX`, `localY` and `localRotation`. `from` and `to` are offsets added to the target's `_x`, `_y` or `_rotation` as it is when the tween starts (so 0 to 100 moves the clip 100 px from where it is). Existing values are unchanged.

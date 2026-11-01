@@ -31,6 +31,15 @@ const dynOut = (def, fields) => (def.extra?.dynamicOutputs ? fields[def.extra.dy
 /** Dynamic input pins (Call Widget args) come from the field named by def.extra.dynamicInputs. */
 const dynIn = (def, fields) => (def.extra?.dynamicInputs ? fields[def.extra.dynamicInputs] ?? [] : []);
 
+/** Repeated input pins (Make Object pairs): the pins of def.extra.repeatInputs once per index, the count from its field (the schema default when the fixture has none). */
+const repIn = (def, fields) => {
+  const r = def.extra?.repeatInputs;
+  if (!r) return [];
+  const s = def.fields?.[r.count] ?? {};
+  const n = Math.min(Math.max(Math.trunc(Number(fields[r.count] ?? s.default)) || 0, s.minimum ?? 0), s.maximum ?? 64);
+  return Array.from({ length: n }, (_, i) => r.pins.map((p) => ({ name: `${p.name}${i}` }))).flat();
+};
+
 /** A function signature for fixtures: Function Entry / Exit take their pins from the graph's signature, not from a field. */
 export const FIXTURE_SIGNATURE = {
   inputs: [{ id: "i1", name: "title", type: "String" }],
@@ -83,7 +92,7 @@ export function render(def, text, fields = fixtureFields(def)) {
       case "raw": return String(fields[name]);
       case "var": return `__g.v_${fields[name] || "x"}`;
       case "params": return dynOut(def, fields).map((p) => `${uid}_${p.name}:${AS2_TYPE[p.type]}`).join(", ");
-      case "args": return [...dynIn(def, fields), ...sigIn(def)].map((p) => `IN_${p.name}`).join(", ");
+      case "args": return [...dynIn(def, fields), ...repIn(def, fields), ...sigIn(def)].map((p) => `IN_${p.name}`).join(", ");
       case "fn": return `mods.Test.Fn_${fields[name]}`;
       case "comp": return `mods.Test.Comp_${fields[name]}`;
       case "symbol": return `"inkwell_component_${fields[name]}"`;
@@ -110,7 +119,7 @@ export function checkTemplate(def, text, packId = "core") {
     else if ((p.kind === "next" || p.kind === "guarded") && !pins(def.outputs, true).includes(p.name)) bad("no such exec output");
     else if (["field", "raw", "var"].includes(p.kind) && !(p.name in def.fields)) bad("no such field");
     else if (p.kind === "params" && !def.extra?.dynamicOutputs) bad("needs extra.dynamicOutputs");
-    else if (p.kind === "args" && !def.extra?.dynamicInputs && !def.extra?.signatureInputs) bad("needs extra.dynamicInputs or extra.signatureInputs");
+    else if (p.kind === "args" && !def.extra?.dynamicInputs && !def.extra?.signatureInputs && !def.extra?.repeatInputs) bad("needs extra.dynamicInputs, extra.signatureInputs or extra.repeatInputs");
     else if (p.kind === "fn" && (def.extra?.callsFunction !== p.name || !(p.name in def.fields))) bad("needs extra.callsFunction naming this field");
     else if (p.kind === "exit" && (!def.extra?.signatureInputs || !(p.name in def.fields))) bad("needs extra.signatureInputs and the field");
     else if (p.kind === "exits" && !def.extra?.dynamicExits) bad("needs extra.dynamicExits");

@@ -1,11 +1,3 @@
-===== core/Abs@1 (pure)
-// [n1] core/Abs@1
-(Math.abs(IN_value) || 0)
-
-===== core/Acos@1 (pure)
-// [n1] core/Acos@1
-(isFinite(Math.acos(IN_value)) ? (Math.acos(IN_value)) : 0)
-
 ===== core/Add@1 (pure)
 // [n1] core/Add@1
 (IN_a + IN_b)
@@ -34,24 +26,12 @@ IN_a && IN_b
 // [n1] core/ArraySortByField@1
 ({ f: function(a, f, d) { var r = a instanceof Array ? a.concat() : []; r.sort(function(x, y) { var p = x[f]; var q = y[f]; var c = (typeof(p) == "number" && typeof(q) == "number") ? p - q : (String(p) < String(q) ? -1 : (String(p) > String(q) ? 1 : 0)); return d ? -c : c; }); return r; } }).f(IN_array, IN_field, IN_descending)
 
-===== core/Asin@1 (pure)
-// [n1] core/Asin@1
-(isFinite(Math.asin(IN_value)) ? (Math.asin(IN_value)) : 0)
-
 ===== core/Assert@1
 // [n1] core/Assert@1
 if (!IN_condition) {
     throw { node: "n1", message: "Assert failed: " + IN_message };
 }
 /* next:then */
-
-===== core/Atan@1 (pure)
-// [n1] core/Atan@1
-(isFinite(Math.atan(IN_value)) ? (Math.atan(IN_value)) : 0)
-
-===== core/Atan2@1 (pure)
-// [n1] core/Atan2@1
-(isFinite(Math.atan2(IN_y, IN_x)) ? (Math.atan2(IN_y, IN_x)) : 0)
 
 ===== core/Branch@1
 // [n1] core/Branch@1
@@ -96,13 +76,17 @@ if (__g.Show != undefined) __g.Show(IN_title, IN_hold);
 if (__g.dl != undefined) clearInterval(__g.dl[""]);
 /* next:then */
 
-===== core/Ceil@1 (pure)
-// [n1] core/Ceil@1
-(Math.ceil(IN_value) || 0)
-
-===== core/Clamp@1 (pure)
-// [n1] core/Clamp@1
-Math.min(Math.max(IN_value, IN_min), IN_max)
+===== core/ClearChildComponents@1
+// [n1] core/ClearChildComponents@1
+var n1_p = IN_parent;
+if (n1_p.inkwellDyn != undefined) {
+    for (var n1_i = 0; n1_i < n1_p.inkwellDyn.length; n1_i++) {
+        n1_p.inkwellDyn[n1_i].removeMovieClip();
+    }
+    n1_p.inkwellDyn = [];
+    __g.restack(n1_p);
+}
+/* next:then */
 
 ===== core/CloseMenu@1
 // [n1] core/CloseMenu@1
@@ -116,10 +100,6 @@ IN_a == IN_b
 ===== core/Concat@1 (pure)
 // [n1] core/Concat@1
 String(IN_a) + String(IN_b)
-
-===== core/Cos@1 (pure)
-// [n1] core/Cos@1
-(isFinite(Math.cos(IN_value)) ? (Math.cos(IN_value)) : 0)
 
 ===== core/Counter@1
 // [n1] core/Counter@1
@@ -139,10 +119,6 @@ var n1_instance = n1_p.attachMovie("inkwell_component_", n1_n, n1_p.getNextHighe
 __g.stackAdd(n1_p, n1_instance, "");
 (new mods.Test.Comp_(n1_instance, IN_props, __g)).init();
 /* next:then */
-
-===== core/DegreesToRadians@1 (pure)
-// [n1] core/DegreesToRadians@1
-(isFinite((IN_value * Math.PI / 180)) ? ((IN_value * Math.PI / 180)) : 0)
 
 ===== core/Delay@1
 // [n1] core/Delay@1
@@ -169,10 +145,6 @@ if (!__g.s_n1) {
     /* next:then */
 }
 
-===== core/Exp@1 (pure)
-// [n1] core/Exp@1
-(isFinite(Math.exp(IN_value)) ? (Math.exp(IN_value)) : 0)
-
 ===== core/Fade@1
 // [n1] core/Fade@1
 clearInterval(__g.t_n1);
@@ -195,10 +167,6 @@ __g.t_n1 = setInterval(function() {
     }
 }, 33);
 /* next:then */
-
-===== core/Floor@1 (pure)
-// [n1] core/Floor@1
-(Math.floor(IN_value) || 0)
 
 ===== core/FocusComponent@1
 // [n1] core/FocusComponent@1
@@ -316,171 +284,18 @@ __g.v_x
 // [n1] core/GetVisible@1
 (IN_target._visible == true)
 
-===== core/InventoryCloseMenu@1
-// [n1] core/InventoryCloseMenu@1
-if (IN_tween) _root.inkwellContract.send("CloseTweenMenu", []);
-_root.inkwellContract.send("CloseMenu", []);
-/* next:then */
-
-===== core/InventoryItemDrop@1
-// [n1] core/InventoryItemDrop@1
-_root.inkwellContract.select(IN_index);
-_root.inkwellContract.send("ItemDrop", [IN_amount]);
-/* next:then */
-
-===== core/InventoryItemSelect@1
-// [n1] core/InventoryItemSelect@1
-_root.inkwellContract.select(IN_index);
-_root.inkwellContract.send("ItemSelect", IN_slot >= 0 ? [IN_slot] : []);
-/* next:then */
-
-===== core/InventoryOnAttemptEquip@1
-// [n1] core/InventoryOnAttemptEquip@1
-_root.inkwellContract.on("AttemptEquip", function() {
-    var n1_slot = typeof (arguments[0]) == "number" ? arguments[0] : 0;
-    try {
-        /* next:then */
-    } catch (e) {
-        __g.fail("n0", e);
-    }
-});
-
-===== core/InventoryOnDropItem@1
-// [n1] core/InventoryOnDropItem@1
-_root.inkwellContract.on("DropItem", function() {
-    try {
-        /* next:then */
-    } catch (e) {
-        __g.fail("n0", e);
-    }
-});
-
-===== core/InventoryOnInvalidateList@1
-// [n1] core/InventoryOnInvalidateList@1
-_root.inkwellContract.on("InvalidateListData", function() {
-    var n1_items = _root.inkwellContract.list.entryList;
-    if (!(n1_items instanceof Array)) n1_items = [];
-    var n1_count = n1_items.length;
-    try {
-        /* next:then */
-    } catch (e) {
-        __g.fail("n0", e);
-    }
-});
-
-===== core/InventoryOnItemCard@1
-// [n1] core/InventoryOnItemCard@1
-_root.inkwellContract.on("UpdateItemCardInfo", function() {
-    var n1_info = typeof (arguments[0]) == "object" ? arguments[0] : {};
-    try {
-        /* next:then */
-    } catch (e) {
-        __g.fail("n0", e);
-    }
-});
-
-===== core/InventoryOnKey@1
-// [n1] core/InventoryOnKey@1
-_root.inkwellContract.on("key:" + "Enter", function() {
-    try {
-        /* next:then */
-    } catch (e) {
-        __g.fail("n0", e);
-    }
-});
-
-===== core/InventoryOnPlayerInfo@1
-// [n1] core/InventoryOnPlayerInfo@1
-_root.inkwellContract.on("UpdatePlayerInfo", function() {
-    var n1_info = typeof (arguments[0]) == "object" ? arguments[0] : {};
-    try {
-        /* next:then */
-    } catch (e) {
-        __g.fail("n0", e);
-    }
-});
-
-===== core/InventoryOnRestoreIndices@1
-// [n1] core/InventoryOnRestoreIndices@1
-_root.inkwellContract.on("RestoreIndices", function() {
-    var n1_indices = [];
-    for (var k = 0; k < arguments.length; k++) n1_indices.push(arguments[k]);
-    try {
-        /* next:then */
-    } catch (e) {
-        __g.fail("n0", e);
-    }
-});
-
-===== core/InventoryOnSetCategories@1
-// [n1] core/InventoryOnSetCategories@1
-_root.inkwellContract.on("SetCategoriesList", function() {
-    var n1_categories = [];
-    for (var k = 0; k + 2 < arguments.length; k += 3) n1_categories.push({ text: String(arguments[k]), flag: Number(arguments[k + 1]) || 0, dontHide: arguments[k + 2] == true });
-    try {
-        /* next:then */
-    } catch (e) {
-        __g.fail("n0", e);
-    }
-});
-
-===== core/InventoryPlaySound@1
-// [n1] core/InventoryPlaySound@1
-_root.inkwellContract.send("PlaySound", [String(IN_sound)]);
-/* next:then */
-
-===== core/InventoryRequestItemCard@1
-// [n1] core/InventoryRequestItemCard@1
-_root.inkwellContract.select(IN_index);
-_root.inkwellContract.send("RequestItemCardInfo", [], "UpdateItemCardInfo");
-/* next:then */
-
-===== core/InventorySaveIndices@1
-// [n1] core/InventorySaveIndices@1
-_root.inkwellContract.send("SaveIndices", [IN_indices instanceof Array ? IN_indices : []]);
-/* next:then */
-
-===== core/InventoryUpdateItem3D@1
-// [n1] core/InventoryUpdateItem3D@1
-_root.inkwellContract.send("UpdateItem3D", [IN_show]);
-/* next:then */
-
 ===== core/Join@1 (pure)
 // [n1] core/Join@1
 ({ f: function(a, s) { return a instanceof Array ? a.join(s) : ""; } }).f(IN_array, IN_separator)
-
-===== core/Lerp@1 (pure)
-// [n1] core/Lerp@1
-IN_a + (IN_b - IN_a) * IN_t
-
-===== core/Ln@1 (pure)
-// [n1] core/Ln@1
-(isFinite(Math.log(IN_value)) ? (Math.log(IN_value)) : 0)
 
 ===== core/Log@1
 // [n1] core/Log@1
 trace("[Inkwell] info n1: " + IN_message);
 /* next:then */
 
-===== core/LogBase@1 (pure)
-// [n1] core/LogBase@1
-(isFinite((Math.log(IN_value) / Math.log(IN_base))) ? ((Math.log(IN_value) / Math.log(IN_base))) : 0)
-
 ===== core/MakeObject@1 (pure)
 // [n1] core/MakeObject@1
-({ f: function(k0, v0, k1, v1, k2, v2, k3, v3) { var o = {}; if (k0 != "") o[k0] = v0; if (k1 != "") o[k1] = v1; if (k2 != "") o[k2] = v2; if (k3 != "") o[k3] = v3; return o; } }).f(IN_key0, IN_value0, IN_key1, IN_value1, IN_key2, IN_value2, IN_key3, IN_value3)
-
-===== core/Max@1 (pure)
-// [n1] core/Max@1
-Math.max(IN_a, IN_b)
-
-===== core/Min@1 (pure)
-// [n1] core/Min@1
-Math.min(IN_a, IN_b)
-
-===== core/Modulo@1 (pure)
-// [n1] core/Modulo@1
-(isFinite(IN_a % IN_b) ? (IN_a % IN_b) : 0)
+({ f: function() { var o = {}; for (var i = 0; i + 1 < arguments.length; i += 2) if (arguments[i] != "") o[arguments[i]] = arguments[i + 1]; return o; } }).f(IN_key0, IN_value0, IN_key1, IN_value1, IN_key2, IN_value2, IN_key3, IN_value3)
 
 ===== core/Multiply@1 (pure)
 // [n1] core/Multiply@1
@@ -523,6 +338,26 @@ __g.onClose = function() {
 ===== core/OnFocus@1
 // [n1] core/OnFocus@1
 IN_target.onSetFocus = function() {
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+};
+
+===== core/OnHover@1
+// [n1] core/OnHover@1
+IN_target.onRollOver = function() {
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+};
+
+===== core/OnHoverEnd@1
+// [n1] core/OnHoverEnd@1
+IN_target.onRollOut = function() {
     try {
         /* next:then */
     } catch (e) {
@@ -666,27 +501,19 @@ var n1_opened = __g.bridge.openMenu(IN_menu) == true;
 // [n1] core/Or@1
 IN_a || IN_b
 
+===== core/ParseInt@1 (pure)
+// [n1] core/ParseInt@1
+(parseInt(String(IN_text), IN_radix) || 0)
+
 ===== core/PlaySound@1
 // [n1] core/PlaySound@1
 var n1_played = __g.bridge.playSound(IN_sound) == true;
 /* next:then */
 
-===== core/Power@1 (pure)
-// [n1] core/Power@1
-(isFinite(Math.pow(IN_base, IN_exponent)) ? (Math.pow(IN_base, IN_exponent)) : 0)
-
 ===== core/ProgressSetValue@1
 // [n1] core/ProgressSetValue@1
 IN_target.gotoAndStop(1 + Math.round(Math.min(Math.max(IN_value, 0), 1) * (100 - 1)));
 /* next:then */
-
-===== core/RadiansToDegrees@1 (pure)
-// [n1] core/RadiansToDegrees@1
-(isFinite((IN_value * 180 / Math.PI)) ? ((IN_value * 180 / Math.PI)) : 0)
-
-===== core/Random@1 (pure)
-// [n1] core/Random@1
-({ f: function(a, b, i) { return i ? a + Math.floor(Math.random() * (b - a + 1)) : a + Math.random() * (b - a); } }).f(IN_min, IN_max, IN_integer)
 
 ===== core/RawAS2@1
 // [n1] core/RawAS2@1
@@ -707,10 +534,6 @@ __g.stackRemove(n1_i._parent, n1_i);
 ===== core/Replace@1 (pure)
 // [n1] core/Replace@1
 (IN_find == "" ? String(IN_text) : String(IN_text).split(IN_find).join(IN_replacement))
-
-===== core/Round@1 (pure)
-// [n1] core/Round@1
-(Math.round(IN_value) || 0)
 
 ===== core/ScrollTo@1
 // [n1] core/ScrollTo@1
@@ -800,21 +623,9 @@ __g.v_x = IN_value;
 IN_target._visible = IN_visible;
 /* next:then */
 
-===== core/Sign@1 (pure)
-// [n1] core/Sign@1
-(isFinite((IN_value > 0 ? 1 : (IN_value < 0 ? -1 : 0))) ? ((IN_value > 0 ? 1 : (IN_value < 0 ? -1 : 0))) : 0)
-
-===== core/Sin@1 (pure)
-// [n1] core/Sin@1
-(isFinite(Math.sin(IN_value)) ? (Math.sin(IN_value)) : 0)
-
 ===== core/Split@1 (pure)
 // [n1] core/Split@1
 String(IN_text).split(IN_separator)
-
-===== core/Sqrt@1 (pure)
-// [n1] core/Sqrt@1
-(isFinite(Math.sqrt(IN_value)) ? (Math.sqrt(IN_value)) : 0)
 
 ===== core/StopTimer@1
 // [n1] core/StopTimer@1
@@ -860,10 +671,6 @@ default:
     /* next:default */
 }
 
-===== core/Tan@1 (pure)
-// [n1] core/Tan@1
-(isFinite(Math.tan(IN_value)) ? (Math.tan(IN_value)) : 0)
-
 ===== core/TextLength@1 (pure)
 // [n1] core/TextLength@1
 String(IN_text).length
@@ -883,7 +690,7 @@ String(IN_text).toLowerCase()
 
 ===== core/ToString@1 (pure)
 // [n1] core/ToString@1
-String(IN_value)
+({ s: function(v, d) { if (v instanceof Array) { if (d > 6) return "[...]"; var a = []; for (var i = 0; i < v.length; i++) a.push(this.s(v[i], d + 1)); return "[" + a.join(", ") + "]"; } if (typeof(v) == "object") { if (d > 6) return "{...}"; var a = []; for (var k in v) a.push(k + ": " + this.s(v[k], d + 1)); return "{" + a.join(", ") + "}"; } if (typeof(v) == "string" && d > 0) return '"' + v + '"'; return String(v); } }).s(IN_value, 0)
 
 ===== core/ToUpper@1 (pure)
 // [n1] core/ToUpper@1
