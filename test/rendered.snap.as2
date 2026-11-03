@@ -88,6 +88,11 @@ if (n1_p.inkwellDyn != undefined) {
 }
 /* next:then */
 
+===== core/ClearFocusLinks@1
+// [n1] core/ClearFocusLinks@1
+delete IN_target.inkwellFocus;
+/* next:then */
+
 ===== core/CloseMenu@1
 // [n1] core/CloseMenu@1
 var n1_closed = __g.bridge.closeMenu(IN_menu) == true;
@@ -327,13 +332,17 @@ IN_target.onRelease = function() {
 
 ===== core/OnClose@1
 // [n1] core/OnClose@1
-__g.onClose = function() {
-    try {
-        /* next:then */
-    } catch (e) {
-        __g.fail("n0", e);
-    }
-};
+// shortcut: another OnClose node of this graph runs first, in node order
+__g.onClose = (function(prev) {
+    return function() {
+        if (prev != undefined) prev();
+        try {
+            /* next:then */
+        } catch (e) {
+            __g.fail("n0", e);
+        }
+    };
+})(__g.onClose);
 
 ===== core/OnFocus@1
 // [n1] core/OnFocus@1
@@ -390,13 +399,17 @@ IN_target.addEventListener("itemClick", __g, "h_n1");
 
 ===== core/OnLoad@1
 // [n1] core/OnLoad@1
-__g.onLoad = function() {
-    try {
-        /* next:then */
-    } catch (e) {
-        __g.fail("n0", e);
-    }
-};
+// shortcut: another OnLoad node of this graph runs first, in node order
+__g.onLoad = (function(prev) {
+    return function() {
+        if (prev != undefined) prev();
+        try {
+            /* next:then */
+        } catch (e) {
+            __g.fail("n0", e);
+        }
+    };
+})(__g.onLoad);
 
 ===== core/OnModEvent@1
 // [n1] core/OnModEvent@1
@@ -412,13 +425,17 @@ __g.addModEventHandler("", function(strArg, numArg) {
 
 ===== core/OnOpen@1
 // [n1] core/OnOpen@1
-__g.onOpen = function() {
-    try {
-        /* next:then */
-    } catch (e) {
-        __g.fail("n0", e);
-    }
-};
+// shortcut: another OnOpen node of this graph runs first, in node order
+__g.onOpen = (function(prev) {
+    return function() {
+        if (prev != undefined) prev();
+        try {
+            /* next:then */
+        } catch (e) {
+            __g.fail("n0", e);
+        }
+    };
+})(__g.onOpen);
 
 ===== core/OnRuntimeMessage@1
 // [n1] core/OnRuntimeMessage@1
@@ -570,6 +587,13 @@ IN_target.enabled = IN_enabled;
 ===== core/SetField@1 (pure)
 // [n1] core/SetField@1
 ({ f: function(o, k, v) { var r = {}; for (var p in o) r[p] = o[p]; if (k != "") r[k] = v; return r; } }).f(IN_object, IN_key, IN_value)
+
+===== core/SetFocusLink@1
+// [n1] core/SetFocusLink@1
+var n1_f = IN_from;
+if (n1_f.inkwellFocus == undefined) n1_f.inkwellFocus = {};
+n1_f.inkwellFocus["down"] = IN_to;
+/* next:then */
 
 ===== core/SetImage@1
 // [n1] core/SetImage@1
