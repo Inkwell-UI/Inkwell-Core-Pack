@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+**Set Image** (`core/SetImage@1`, template only): the target is hidden until the picture has loaded (`MovieClipLoader`, shown again in `onLoadInit`), so the empty slot no longer shows before the image arrives. Side effects: the target is always made visible after a successful load, and a failed load leaves it hidden. `MovieClipLoader` is used by the editor's image loader already but is unverified in game.
+
 **On Load, On Open, On Close chain** (templates only): several nodes of the same event in one graph all run, in node order; before, the last one replaced the others. Needs the editor that no longer reports `graph-duplicate-handler` for them.
 
 **Set Focus Link, Clear Focus Links** (Components, `core/SetFocusLink@1`, `core/ClearFocusLinks@1`, pack 0.5.6): set or remove where one pad direction (up, down, left, right) goes from an element, so elements made at run time with Create Component join the focus graph. The menu class checks the link on the focused clip before its compiled table; only menus that have a focus graph move focus by the pad (limit: no static graph, no `moveFocus`). Needs the editor that checks `inkwellFocus` in `moveFocus`.

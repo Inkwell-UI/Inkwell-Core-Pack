@@ -597,7 +597,10 @@ n1_f.inkwellFocus["down"] = IN_to;
 
 ===== core/SetImage@1
 // [n1] core/SetImage@1
-IN_target.loadMovie(IN_url);
+IN_target._visible = false;
+__g.h_n1 = new MovieClipLoader();
+__g.h_n1.onLoadInit = function(mc) { mc._visible = true; };
+__g.h_n1.loadClip(IN_url, IN_target);
 /* next:then */
 
 ===== core/SetItems@1
