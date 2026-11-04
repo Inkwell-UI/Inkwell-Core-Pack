@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+**Make Component, Add to List** (`core/MakeComponent@1` pure, `core/AddToList@1`, pack 0.6.0): Make Component describes a component and its props (`{id, symbol, cls, size, props}`) and creates nothing; Add to List appends one item to a list, and a Make Component recipe becomes a row of that component (`attachMovie` plus the component's graph with the item's props). **Set Items** (`core/SetItems@1`, template only) takes recipes too and now passes the graph as owner (`setItems(items, __g)`); strings and objects behave as before. A list frame with no children is a component list. Create Component is unchanged. Needs the editor with the component list.
+
 **Set Image** (`core/SetImage@1`, template only): the target is hidden until the picture has loaded (`MovieClipLoader`, shown again in `onLoadInit`), so the empty slot no longer shows before the image arrives. Side effects: the target is always made visible after a successful load, and a failed load leaves it hidden. `MovieClipLoader` is used by the editor's image loader already but is unverified in game.
 
 **On Load, On Open, On Close chain** (templates only): several nodes of the same event in one graph all run, in node order; before, the last one replaced the others. Needs the editor that no longer reports `graph-duplicate-handler` for them.

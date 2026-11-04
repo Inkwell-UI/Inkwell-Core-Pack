@@ -2,6 +2,11 @@
 // [n1] core/Add@1
 (IN_a + IN_b)
 
+===== core/AddToList@1
+// [n1] core/AddToList@1
+IN_target.addItem(IN_recipe, __g);
+/* next:then */
+
 ===== core/And@1 (pure)
 // [n1] core/And@1
 IN_a && IN_b
@@ -297,6 +302,10 @@ __g.v_x
 // [n1] core/Log@1
 trace("[Inkwell] info n1: " + IN_message);
 /* next:then */
+
+===== core/MakeComponent@1 (pure)
+// [n1] core/MakeComponent@1
+({ id: "", symbol: "inkwell_component_", cls: mods.Test.Comp_, size: __g.stackSize(""), props: IN_props })
 
 ===== core/MakeObject@1 (pure)
 // [n1] core/MakeObject@1
@@ -605,7 +614,7 @@ __g.h_n1.loadClip(IN_url, IN_target);
 
 ===== core/SetItems@1
 // [n1] core/SetItems@1
-IN_target.setItems(IN_items instanceof Array ? IN_items : []);
+IN_target.setItems(IN_items instanceof Array ? IN_items : [], __g);
 /* next:then */
 
 ===== core/SetPosition@1
