@@ -25,3 +25,15 @@ Commands (yarn only): `yarn validate` (schemas, template files exist, placeholde
 - **No per-frame event.** A custom menu runs `onEnterFrame` about 700 times a second while the game is paused (SPEC-CHANGES V13.4): time comes from `getTimer()` (Get Time) and periodic work from `setInterval` (On Timer, On Update with its measured `delta`).
 - **Delay is retriggerable** (a second entry into the same Delay restarts its timer) and Cancel Delay / Stop Timer find timers by `name` or node id; see `docs/templates.md`. Items of Array and Object pins are untyped: nodes carry `valueType` and coerce (`docs/templates.md`, Untyped items).
 - **Generated output license:** core pack templates carry Inkwell's non-commercial terms, including the paywall rule. Keep the license notice in the repo.
+
+## Agent logging (required for all agents and subagents, any model)
+Log your work in `d:\Mods\Inkwell\agents-logs\YYYY-MM-DD.md` (today's date).
+1. Log one entry per user request, including short follow-ups ("try this fix", "yes do it"). Write it before your first edit for that request, not after. Only log when you actually write something (files, code, config); if the request is research only, don't log. Before writing, open today's log; if it doesn't exist, create it with the heading `# Agent log — YYYY-MM-DD`.
+2. Append (never edit or delete) one entry:
+   ```
+   ## HH:MM · agent|subagent (model-id)[, spawned by agent HH:MM]
+   - **User request:** one-line summary
+   - **Doing:** one or two lines on how you're fulfilling it
+   ```
+3. Say `subagent` if another agent spawned you automatically, otherwise `agent`.
+4. The entry may be written by a haiku model.
