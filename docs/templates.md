@@ -29,6 +29,7 @@ Syntax `{{kind.name}}` (or `{{params}}`). Never write two `{` in a row anywhere 
 | `{{comp.<field>}}` | Create Component only: the full AS2 class name of the component graph whose Figma component id is in that field (`extra.createsComponent` names the field) |
 | `{{symbol.<field>}}` | Create Component only: the linkage name of that component's library symbol, as an AS2 string (what `attachMovie` takes) |
 | `{{exit.<field>}}` | Function Exit only: the name of the signature exit whose id is in that field, as an AS2 identifier |
+| `{{loop.stop}}` | Break only (`extra.exitsLoop`): the AS2 name of the enclosing loop's stop flag, `<uid>_stop`. The loop nodes (`extra.loop` names their body exec output) declare `var <uid>_stop = false;` and test `!<uid>_stop` in their `for` condition; Break sets it and `return`s from the body closure, Continue just `return`s. The codegen refuses both outside a loop body |
 | `{{exits}}` | Call Function only, alone on its line: one `<exit name>: function(<outputs as typed params>) { try { ... } catch ... }` per entry of `fields.exits` (`extra.dynamicExits`), comma-separated; each body is the guarded continuation of that exit |
 
 Rules:
@@ -123,3 +124,7 @@ A function is a graph of its own (Spec `scope: "function"`, `Graph.signature`), 
 ## Repeated input pins
 
 `extra.repeatInputs: {"count": "<field>", "pins": [<input pin definitions>]}` makes the node repeat the listed input pins once per index, named `<name><index>` (`key0`, `value0`, `key1`...). `count` names an integer field of the node; its schema's `minimum`, `maximum` and `default` apply (a node without the field has the default, so adding the key to an existing node with the old pin count changes nothing). `typeFrom` works inside the pins. A template reaches them through `{{args}}` (all data inputs after the static ones, in order) or by name, `{{in.key0}}`. Make Object uses it: `pairs` pairs. Wires to a pin that no longer exists after the count is lowered are not removed by the editor.
+
+## Theme nodes (0.7)
+
+Get Theme, Get Theme Names, Get Theme Variable, Set Theme, Cycle Theme and On Theme Changed call methods the editor's codegen adds to the graph class when the graph has one of them (the way Get Localized Text calls `__g.tr`): `th()` (current theme name), `thNames()` (Array of Strings), `tv(name)` (the variable's value in the current theme, `undefined` when unknown), `setTheme(name)`, `cycleTheme()` and `addThemeHandler(fn)` (`fn(name)`). Templates coerce: Get Theme Variable returns `Number(v) || 0` for Color and Number, `String` for String and `v == true` for Bool (the pin is Number for Color, `typeFrom: valueType` otherwise). In a HUD widget the switches are no-ops and `th()` is the baked default theme.

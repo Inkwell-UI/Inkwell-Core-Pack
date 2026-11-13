@@ -90,6 +90,7 @@ export function render(def, text, fields = fixtureFields(def)) {
       case "out": return `${uid}_${name}`;
       case "field": return JSON.stringify(fields[name]);
       case "raw": return String(fields[name]);
+      case "loop": return "LOOP_stop";
       case "var": return `__g.v_${fields[name] || "x"}`;
       case "params": return dynOut(def, fields).map((p) => `${uid}_${p.name}:${AS2_TYPE[p.type]}`).join(", ");
       case "args": return [...dynIn(def, fields), ...repIn(def, fields), ...sigIn(def)].map((p) => `IN_${p.name}`).join(", ");
@@ -123,9 +124,11 @@ export function checkTemplate(def, text, packId = "core") {
     else if (p.kind === "fn" && (def.extra?.callsFunction !== p.name || !(p.name in def.fields))) bad("needs extra.callsFunction naming this field");
     else if (p.kind === "exit" && (!def.extra?.signatureInputs || !(p.name in def.fields))) bad("needs extra.signatureInputs and the field");
     else if (p.kind === "exits" && !def.extra?.dynamicExits) bad("needs extra.dynamicExits");
+    else if (p.kind === "loop" && (p.name !== "stop" || !def.extra?.exitsLoop)) bad("only {{loop.stop}}, and only with extra.exitsLoop");
     else if ((p.kind === "comp" || p.kind === "symbol") && (def.extra?.createsComponent !== p.name || !(p.name in def.fields))) bad("needs extra.createsComponent naming this field");
-    else if (!["node", "in", "out", "next", "guarded", "field", "raw", "var", "params", "args", "fn", "exit", "exits", "comp", "symbol"].includes(p.kind)) bad("unknown placeholder kind");
+    else if (!["node", "in", "out", "next", "guarded", "field", "raw", "var", "params", "args", "fn", "exit", "exits", "comp", "symbol", "loop"].includes(p.kind)) bad("unknown placeholder kind");
   }
+  if (def.extra?.loop !== undefined && !pins(def.outputs, true).includes(def.extra.loop)) errs.push("extra.loop must name an exec output (the loop body)");
   if (def.extra?.dynamicExits) {
     if (ph.filter((p) => p.kind === "exits").length !== 1) errs.push("{{exits}} must be placed exactly once");
     if (!text.split("\n").some((l) => /^\s*\{\{exits\}\}\s*$/.test(l))) errs.push("{{exits}} must be alone on its line");

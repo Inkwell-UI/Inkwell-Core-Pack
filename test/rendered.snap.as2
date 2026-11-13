@@ -46,6 +46,16 @@ if (IN_condition) {
     /* next:false */
 }
 
+===== core/Break@1
+// [n1] core/Break@1
+LOOP_stop = true;
+return;
+
+===== core/BringToFront@1
+// [n1] core/BringToFront@1
+IN_target.swapDepths(IN_target._parent.getNextHighestDepth());
+/* next:then */
+
 ===== core/CallFunction@1
 // [n1] core/CallFunction@1
 (new mods.Test.Fn_Greet(__g.base, __g, {
@@ -98,6 +108,11 @@ if (n1_p.inkwellDyn != undefined) {
 delete IN_target.inkwellFocus;
 /* next:then */
 
+===== core/ClearMask@1
+// [n1] core/ClearMask@1
+IN_target.setMask(null);
+/* next:then */
+
 ===== core/CloseMenu@1
 // [n1] core/CloseMenu@1
 var n1_closed = __g.bridge.closeMenu(IN_menu) == true;
@@ -110,6 +125,10 @@ IN_a == IN_b
 ===== core/Concat@1 (pure)
 // [n1] core/Concat@1
 String(IN_a) + String(IN_b)
+
+===== core/Continue@1
+// [n1] core/Continue@1
+return;
 
 ===== core/Counter@1
 // [n1] core/Counter@1
@@ -128,6 +147,11 @@ if (n1_n == "") n1_n = "component" + n1_p.getNextHighestDepth();
 var n1_instance = n1_p.attachMovie("inkwell_component_", n1_n, n1_p.getNextHighestDepth());
 __g.stackAdd(n1_p, n1_instance, "");
 (new mods.Test.Comp_(n1_instance, IN_props, __g)).init();
+/* next:then */
+
+===== core/CycleTheme@1
+// [n1] core/CycleTheme@1
+__g.cycleTheme();
 /* next:then */
 
 ===== core/Delay@1
@@ -185,13 +209,14 @@ Selection.setFocus(IN_target);
 
 ===== core/For@1
 // [n1] core/For@1
+var n1_stop = false;
 var n1_body = function(n1_index) {
     /* next:body */
 };
 var n1_first = IN_first;
 var n1_last = IN_last;
 if (n1_last - n1_first > 10000) n1_last = n1_first + 10000;
-for (var n1_i = n1_first; n1_i <= n1_last; n1_i++) {
+for (var n1_i = n1_first; n1_i <= n1_last && !n1_stop; n1_i++) {
     n1_body(n1_i);
 }
 /* next:completed */
@@ -199,10 +224,11 @@ for (var n1_i = n1_first; n1_i <= n1_last; n1_i++) {
 ===== core/ForEach@1
 // [n1] core/ForEach@1
 var n1_arr = IN_array;
+var n1_stop = false;
 var n1_body = function(n1_item, n1_index) {
     /* next:body */
 };
-for (var n1_i = 0; n1_i < n1_arr.length; n1_i++) {
+for (var n1_i = 0; n1_i < n1_arr.length && !n1_stop; n1_i++) {
     n1_body(n1_arr[n1_i], n1_i);
 }
 /* next:completed */
@@ -255,6 +281,16 @@ var n1_y = Number(IN_target._y) || 0;
 // [n1] core/GetProp@1
 __g.props[""]
 
+===== core/GetRotation@1 (pure)
+// [n1] core/GetRotation@1
+(Number(IN_target._rotation) || 0)
+
+===== core/GetScale@1
+// [n1] core/GetScale@1
+var n1_x = Number(IN_target._xscale) || 0;
+var n1_y = Number(IN_target._yscale) || 0;
+/* next:then */
+
 ===== core/GetScroll@1
 // [n1] core/GetScroll@1
 var n1_t = IN_target;
@@ -278,9 +314,27 @@ var n1_item = n1_found ? i_n1 : {};
 // [n1] core/GetSetting@1
 ({ f: function(v) { return v == undefined ? "" : String(v); } }).f(__g.bridge.getSetting(IN_section, IN_key, IN_default))
 
+===== core/GetSize@1
+// [n1] core/GetSize@1
+var n1_width = Number(IN_target._width) || 0;
+var n1_height = Number(IN_target._height) || 0;
+/* next:then */
+
 ===== core/GetText@1 (pure)
 // [n1] core/GetText@1
 (IN_target.text == undefined ? "" : String(IN_target.text))
+
+===== core/GetTheme@1 (pure)
+// [n1] core/GetTheme@1
+__g.th()
+
+===== core/GetThemeNames@1 (pure)
+// [n1] core/GetThemeNames@1
+__g.thNames()
+
+===== core/GetThemeVariable@1 (pure)
+// [n1] core/GetThemeVariable@1
+({ f: function(v, t) { if (t == "Bool") return v == true; if (t == "String") return v == undefined ? "" : String(v); return Number(v) || 0; } }).f(__g.tv(IN_name), "Color")
 
 ===== core/GetTime@1 (pure)
 // [n1] core/GetTime@1
@@ -294,6 +348,12 @@ __g.v_x
 // [n1] core/GetVisible@1
 (IN_target._visible == true)
 
+===== core/GotoAndPlay@1
+// [n1] core/GotoAndPlay@1
+var n1_f = IN_frame;
+IN_target.gotoAndPlay(isNaN(Number(n1_f)) || n1_f == "" ? n1_f : Number(n1_f));
+/* next:then */
+
 ===== core/Join@1 (pure)
 // [n1] core/Join@1
 ({ f: function(a, s) { return a instanceof Array ? a.join(s) : ""; } }).f(IN_array, IN_separator)
@@ -302,6 +362,17 @@ __g.v_x
 // [n1] core/Log@1
 trace("[Inkwell] info n1: " + IN_message);
 /* next:then */
+
+===== core/Loop@1
+// [n1] core/Loop@1
+var n1_stop = false;
+var n1_body = function(n1_index) {
+    /* next:body */
+};
+for (var n1_i = 0; n1_i < 1000 && !n1_stop; n1_i++) {
+    n1_body(n1_i);
+}
+/* next:completed */
 
 ===== core/MakeComponent@1 (pure)
 // [n1] core/MakeComponent@1
@@ -406,6 +477,21 @@ __g.h_n1 = function(e) {
 };
 IN_target.addEventListener("itemClick", __g, "h_n1");
 
+===== core/OnKey@1
+// [n1] core/OnKey@1
+var n1_l = new Object();
+n1_l.onKeyDown = function() {
+    var n1_code = Key.getCode();
+    if (0 != 0 && n1_code != 0) return;
+    var n1_ascii = Key.getAscii() > 0 ? String.fromCharCode(Key.getAscii()) : "";
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+};
+Key.addListener(n1_l);
+
 ===== core/OnLoad@1
 // [n1] core/OnLoad@1
 // shortcut: another OnLoad node of this graph runs first, in node order
@@ -453,6 +539,17 @@ __g.addMessageHandler("", function(name, text, number, flag) {
     var n1_text = text == undefined ? "" : String(text);
     var n1_number = Number(number) || 0;
     var n1_flag = flag == true;
+    try {
+        /* next:then */
+    } catch (e) {
+        __g.fail("n0", e);
+    }
+});
+
+===== core/OnThemeChanged@1
+// [n1] core/OnThemeChanged@1
+__g.addThemeHandler(function(name) {
+    var n1_name = name == undefined ? "" : String(name);
     try {
         /* next:then */
     } catch (e) {
@@ -531,6 +628,11 @@ IN_a || IN_b
 // [n1] core/ParseInt@1
 (parseInt(String(IN_text), IN_radix) || 0)
 
+===== core/Play@1
+// [n1] core/Play@1
+IN_target.play();
+/* next:then */
+
 ===== core/PlaySound@1
 // [n1] core/PlaySound@1
 var n1_played = __g.bridge.playSound(IN_sound) == true;
@@ -545,6 +647,10 @@ IN_target.gotoAndStop(1 + Math.round(Math.min(Math.max(IN_value, 0), 1) * (100 -
 // [n1] core/RawAS2@1
 
 /* next:then */
+
+===== core/RawAS2Value@1 (pure)
+// [n1] core/RawAS2Value@1
+({ f: function(v, t) { if (t == "Number") return Number(v) || 0; if (t == "Bool") return v == true || v == "true"; if (t == "Array") return v instanceof Array ? v : []; if (t == "Object") return (typeof(v) == "object" && !(v instanceof Array)) ? v : {}; return v == undefined ? "" : String(v); } }).f((undefined), "String")
 
 ===== core/Refresh@1
 // [n1] core/Refresh@1
@@ -588,6 +694,11 @@ __g.bridge.sendModEvent(IN_event, IN_strArg, IN_numArg);
 IN_target._alpha = IN_alpha;
 /* next:then */
 
+===== core/SetBlendMode@1
+// [n1] core/SetBlendMode@1
+IN_target.blendMode = "normal";
+/* next:then */
+
 ===== core/SetEnabled@1
 // [n1] core/SetEnabled@1
 IN_target.enabled = IN_enabled;
@@ -617,6 +728,11 @@ __g.h_n1.loadClip(IN_url, IN_target);
 IN_target.setItems(IN_items instanceof Array ? IN_items : [], __g);
 /* next:then */
 
+===== core/SetMask@1
+// [n1] core/SetMask@1
+IN_target.setMask(IN_mask);
+/* next:then */
+
 ===== core/SetPosition@1
 // [n1] core/SetPosition@1
 IN_target._x = IN_x;
@@ -634,6 +750,12 @@ IN_target._xscale = IN_x;
 IN_target._yscale = IN_y;
 /* next:then */
 
+===== core/SetSize@1
+// [n1] core/SetSize@1
+IN_target._width = IN_width;
+IN_target._height = IN_height;
+/* next:then */
+
 ===== core/SetState@1
 // [n1] core/SetState@1
 IN_target.gotoAndStop(IN_state);
@@ -642,6 +764,26 @@ IN_target.gotoAndStop(IN_state);
 ===== core/SetText@1
 // [n1] core/SetText@1
 IN_target.text = IN_text;
+/* next:then */
+
+===== core/SetTextColor@1
+// [n1] core/SetTextColor@1
+IN_target.textColor = IN_color;
+/* next:then */
+
+===== core/SetTextFormat@1
+// [n1] core/SetTextFormat@1
+var n1_tf = IN_target.getTextFormat();
+if (IN_size > 0) n1_tf.size = IN_size;
+if ("keep" != "keep") n1_tf.align = "keep";
+if ("keep" != "keep") n1_tf.bold = ("keep" == "on");
+IN_target.setTextFormat(n1_tf);
+IN_target.setNewTextFormat(n1_tf);
+/* next:then */
+
+===== core/SetTheme@1
+// [n1] core/SetTheme@1
+__g.setTheme(IN_name);
 /* next:then */
 
 ===== core/SetTint@1
@@ -662,6 +804,11 @@ IN_target._visible = IN_visible;
 ===== core/Split@1 (pure)
 // [n1] core/Split@1
 String(IN_text).split(IN_separator)
+
+===== core/Stop@1
+// [n1] core/Stop@1
+IN_target.stop();
+/* next:then */
 
 ===== core/StopTimer@1
 // [n1] core/StopTimer@1
@@ -687,6 +834,11 @@ String(IN_text).substr(IN_start, (IN_length < 0 ? 999999 : IN_length))
 ===== core/Subtract@1 (pure)
 // [n1] core/Subtract@1
 (IN_a - IN_b)
+
+===== core/SwapDepths@1
+// [n1] core/SwapDepths@1
+IN_target.swapDepths(IN_other);
+/* next:then */
 
 ===== core/Switch@1
 // [n1] core/Switch@1
@@ -741,6 +893,16 @@ var n1_value = __g.v_x == true;
 ===== core/Translate@1 (pure)
 // [n1] core/Translate@1
 IN_key
+
+===== core/TryCatch@1
+// [n1] core/TryCatch@1
+try {
+    /* next:body */
+} catch (e) {
+    var n1_error = typeof (e) == "object" ? (e.message != undefined ? String(e.message) : String(e)) : String(e);
+    /* next:catch */
+}
+/* next:then */
 
 ===== core/Tween@1
 // [n1] core/Tween@1
